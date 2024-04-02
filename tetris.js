@@ -65,7 +65,7 @@ addEventListener('keydown', ({key}) => {
             }
             break
         case 'ArrowRight':
-            if ((startBlockX<(canvas.width/2)+(blocksX*blockDimension)/2-120) && offset<blocksY*blockDimension-31){
+            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && offset<blocksY*blockDimension-31){
                 startBlockX+=30
             }
             break
@@ -76,18 +76,6 @@ addEventListener('keydown', ({key}) => {
 function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill(0));
-
-    // // DEMO - line pre set
-    // mazeState[19][1] = 1
-    // mazeState[19][2] = 1
-    // mazeState[19][3] = 1
-    // mazeState[19][4] = 1
-    //
-    // // DEMO - Square
-    // mazeState[18][6] = 1
-    // mazeState[18][7] = 1
-    // mazeState[19][6] = 1
-    // mazeState[19][7] = 1
 
     console.log(mazeState)
 
@@ -109,16 +97,14 @@ function game()
 
     if (activeMinos === 0) {
         activeMinos = array[Math.floor(Math.random() * array.length)];
-        startBlockX = (canvas.width/2)-60
-        startBlockY = (canvas.height/2)-(blocksY*blockDimension)/2
         offset = 0
     }
 
-    if(offset<blocksY*blockDimension-30){
+    if(offset<blocksY*blockDimension-activeMinos.length*blockDimension) {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
         offset+=1
-    }else if (offset === blocksY * blockDimension - 30){
+    }else if (offset === blocksY * blockDimension - activeMinos.length*blockDimension){
 
         let minosPosition = {
             x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
@@ -128,8 +114,13 @@ function game()
         console.log(minosPosition)
         console.log(activeMinos)
 
-        //TODO - komplettes Minos abspeichern
-        mazeState[minosPosition.y][minosPosition.x] = 1
+        for(let i = 0; i < activeMinos.length; i++) {
+            for (let j = 0; j < activeMinos[i].length; j++) {
+                if (activeMinos[i][j] === 1) {
+                    mazeState[minosPosition.y + i][minosPosition.x + j] = 1
+                }
+            }
+        }
 
         activeMinos = 0
     }
