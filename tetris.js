@@ -3,34 +3,32 @@ const canvas = document.getElementById('canvas')
 let lastTime = Date.now();
 let fps = 0;
 
-
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
 let offset = 0
-let offset2 = 0
 let frameCount = 0
 
-let blockX = 10
-let blockY = 20
-let blockDimension = 40
+let blocksX = 10
+let blocksY = 20
+let blockDimension = 30
+
+let activeMinos = 0
+
+let mazeState = []
 
 let I = [
-    [1, 1, 1, 1],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
+    [1, 1, 1, 1]
 ];
 
 let J = [
     [1, 0, 0],
-    [1, 1, 1],
-    [0, 0, 0]
+    [1, 1, 1]
 ];
 
 let L = [
     [0, 0, 1],
-    [1, 1, 1],
-    [0, 0, 0]
+    [1, 1, 1]
 ];
 
 let O = [
@@ -40,40 +38,66 @@ let O = [
 
 let S = [
     [0, 1, 1],
-    [1, 1, 0],
-    [0, 0, 0]
+    [1, 1, 0]
 ];
 
 let T = [
     [0, 1, 0],
-    [1, 1, 1],
-    [0, 0, 0]
+    [1, 1, 1]
 ];
 
 let Z = [
     [1, 1, 0],
     [0, 1, 1],
-    [0, 0, 0]
 ];
 
-let startBlockX = (canvas.width/2)-(blockX*blockDimension)/2
-let startBlockY = (canvas.height/2)-(blockY*blockDimension)/2
+const array = [I, J, L, O, S, T, Z];
+
+let startBlockX = (canvas.width/2)-60
+let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 const context = canvas.getContext('2d')
 addEventListener('keydown', ({key}) => {
     switch (key) {
-        case 'a':
-            startBlockX-=40
+        case 'ArrowLeft':
+            if ((startBlockX>(canvas.width/2)-(blocksX*blockDimension)/2) && offset<blocksY*blockDimension-31){
+                startBlockX-=30
+            }
             break
-        case 'd':
-            startBlockX+=40
+        case 'ArrowRight':
+            if ((startBlockX<(canvas.width/2)+(blocksX*blockDimension)/2-120) && offset<blocksY*blockDimension-31){
+                startBlockX+=30
+            }
             break
     }
 });
+
+// Prepare some start variables
+function initGame()
+{
+    mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill(0));
+
+    // // DEMO - line pre set
+    // mazeState[19][1] = 1
+    // mazeState[19][2] = 1
+    // mazeState[19][3] = 1
+    // mazeState[19][4] = 1
+    //
+    // // DEMO - Square
+    // mazeState[18][6] = 1
+    // mazeState[18][7] = 1
+    // mazeState[19][6] = 1
+    // mazeState[19][7] = 1
+
+    console.log(mazeState)
+
+    game()
+}
+
+// game loop
 function game()
 {
     window.requestAnimationFrame(game)
-
 
     context.reset()
 
@@ -83,42 +107,72 @@ function game()
 
     debug()
 
-    if(offset>blockY*blockDimension-41){
-        drawBlock(startBlockX, startBlockY, I)
-    }else{
-        drawBlock(startBlockX, startBlockY, I)
-
-        offset+=1
+    if (activeMinos === 0) {
+        activeMinos = array[Math.floor(Math.random() * array.length)];
+        startBlockX = (canvas.width/2)-60
+        startBlockY = (canvas.height/2)-(blocksY*blockDimension)/2
+        offset = 0
     }
 
+    if(offset<blocksY*blockDimension-30){
+        drawBlock(startBlockX, startBlockY + offset, activeMinos)
+
+        offset+=1
+    }else if (offset === blocksY * blockDimension - 30){
+
+        let minosPosition = {
+            x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
+            y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
+        }
+
+        console.log(minosPosition)
+        console.log(activeMinos)
+
+        //TODO - komplettes Minos abspeichern
+        mazeState[minosPosition.y][minosPosition.x] = 1
+
+        activeMinos = 0
+    }
 }
 
 function hintergrund() {
     context.strokeStyle = 'grey'
 
+    let mazeStartX = (canvas.width/2)-(blocksX*blockDimension)/2
+    let mazeStartY = (canvas.height/2) - (blocksY*blockDimension)/2
+
     // Desenarea a 20 linii orizontale
     for(let i = 0; i <= 20; i++) {
-        let y = (canvas.height/2)-(blockY*blockDimension)/2 + i*blockDimension;
+        let y = (canvas.height/2)-(blocksY*blockDimension)/2 + i*blockDimension;
         context.beginPath();
-        context.moveTo((canvas.width/2)-(blockX*blockDimension)/2, y);
-        context.lineTo((canvas.width/2)+(blockX*blockDimension)/2, y);
+        context.moveTo((canvas.width/2)-(blocksX*blockDimension)/2, y);
+        context.lineTo((canvas.width/2)+(blocksX*blockDimension)/2, y);
         context.stroke();
     }
 
     // Desenarea a 10 linii verticale
     for(let j = 0; j <= 10; j++) {
-        let x = (canvas.width/2)-(blockX*blockDimension)/2 + j*blockDimension;
+        let x = (canvas.width/2)-(blocksX*blockDimension)/2 + j*blockDimension;
         context.beginPath();
-        context.moveTo(x, (canvas.height/2)-(blockY*blockDimension)/2);
-        context.lineTo(x, (canvas.height/2)+(blockY*blockDimension)/2);
+        context.moveTo(x, (canvas.height/2)-(blocksY*blockDimension)/2);
+        context.lineTo(x, (canvas.height/2)+(blocksY*blockDimension)/2);
         context.stroke();
+    }
+
+    for(let i = 0; i < blocksY; i++) {
+        for(let j = 0; j < blocksX; j++) {
+            if (mazeState[i][j] === 1) {
+                context.fillStyle = 'grey'
+                context.fillRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension);
+            }
+        }
     }
 }
 function drawBlock(x, y, block) {
     for(let i = 0; i < block.length; i++) {
         for(let j = 0; j < block[i].length; j++) {
             if(block[i][j] === 1) {
-                context.fillRect(x + j*blockDimension, y + i*blockDimension + offset, blockDimension, blockDimension);
+                context.fillRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension);
 
             }
         }
@@ -138,15 +192,4 @@ function debug() {
 
     context.fillText('Frame: ' + frameCount, 10, 10)
 }
-// function rectangle() {
-//     context.fillStyle = 'blue'
-//     context.strokeStyle = 'green'
-//     context.fillRect((canvas.width/2)-(blockX*blockDimension)/2, (canvas.height/2)-(blockY*blockDimension)/2+offset,80,80)
-//     context.strokeRect((canvas.width/2)-(blockX*blockDimension)/2, (canvas.height/2)-(blockY*blockDimension)/2+offset,80,80)
-// }
-// function linie() {
-//     context.fillStyle = 'green'
-//     context.fillRect((canvas.width/2)-(blockX*blockDimension)/2+160, (canvas.height/2)-(blockY*blockDimension)/2+offset2,160,40)
-// }
-
-game()
+initGame()
