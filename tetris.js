@@ -11,9 +11,9 @@ canvas.height = window.innerHeight
 let offset = 0
 let frameCount = 0
 
-let blocksX = 10
-let blocksY = 20
-let blockDimension = 30
+const blocksX = 10
+const blocksY = 20
+const blockDimension = 30
 
 let activeMinos = 0
 let activeColor = ""
@@ -56,7 +56,7 @@ let Z = [
 
 const array = [I, J, L, O, S, T, Z];
 
-let randomColor
+let gameOver = false;
 
 let startBlockX = (canvas.width/2)-60
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
@@ -107,6 +107,12 @@ addEventListener('keydown', ({key}) => {
         case 'ArrowUp':
             activeMinos = rotate(activeMinos);
             break
+        case 'ArrowDown':
+            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
+                offset+=10
+                break
+            }
+
     }
 });
 
@@ -133,7 +139,15 @@ function game()
 
     debug()
 
-    if (activeMinos === 0) {
+    for(let i = 0; i < blocksX; i++) {
+        if (mazeState[0][i].filled === 1) {
+            console.log("Game Over");
+            gameOver = true;
+            return;
+        }
+    }
+
+    if (activeMinos === 0 && !gameOver) {
         activeMinos = array[Math.floor(Math.random() * array.length)];
         activeColor= "#" + Math.floor(Math.random() * 16777215).toString(16);
         startBlockX = (canvas.width/2)-60
