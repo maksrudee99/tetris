@@ -16,6 +16,19 @@ let blockDimension = 30
 let activeMinos = 0
 
 let mazeState = []
+let clear = false
+let color = ''
+const audio = document.getElementById("tetris-soundtrack");
+const colors = {
+    'I': 'cyan',
+    'O': 'yellow',
+    'T': 'purple',
+    'S': 'green',
+    'Z': 'red',
+    'J': 'blue',
+    'L': 'orange'
+};
+
 
 let I = [
     [1, 1, 1, 1]
@@ -55,8 +68,11 @@ const array = [I, J, L, O, S, T, Z];
 
 let startBlockX = (canvas.width/2)-60
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
-
+const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
+ const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
 const context = canvas.getContext('2d')
+
+ let velocity = 1
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
@@ -77,14 +93,21 @@ function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill(0));
 
-    console.log(mazeState)
+    // console.log(mazeState)
+    // audio.play();
 
     game()
+    // clearSound.play()
+    backgroundSound.play()
 }
 
 // game loop
 function game()
 {
+// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+// audio.addEventListener("canplaythrough",() => audio.play())
+    // document.getElementById('tetris-soundtrack').play();
+// clearSound.play();
     window.requestAnimationFrame(game)
 
     context.reset()
@@ -99,31 +122,6 @@ function game()
         activeMinos = array[Math.floor(Math.random() * array.length)];
         offset = 0
     }
-
-    // if(offset<blocksY*blockDimension-activeMinos.length*blockDimension) {
-    //     drawBlock(startBlockX, startBlockY + offset, activeMinos)
-    //
-    //     offset+=1
-    // }else if (offset === blocksY * blockDimension - activeMinos.length*blockDimension){
-    //
-    //     let minosPosition = {
-    //         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
-    //         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
-    //     }
-    //
-    //     console.log(minosPosition)
-    //     console.log(activeMinos)
-    //
-    //     for(let i = 0; i < activeMinos.length; i++) {
-    //         for (let j = 0; j < activeMinos[i].length; j++) {
-    //             if (activeMinos[i][j] === 1) {
-    //                 mazeState[minosPosition.y + i][minosPosition.x + j] = 1
-    //             }
-    //         }
-    //     }
-    //
-    //     activeMinos = 0
-    // }
 
     let minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
@@ -146,18 +144,36 @@ function game()
             for (let j = 0; j < activeMinos[i].length; j++) {
                 if (activeMinos[i][j] === 1) {
                     mazeState[minosPosition.y + i][minosPosition.x + j] = 1
+                    velocity = 1;
                 }
             }
         }
 
-        console.log(minosPosition)
-        console.log(activeMinos)
-
+        // console.log(minosPosition)
+        // console.log(activeMinos)
+        console.log(array)
         activeMinos = 0
+
+        for (i = 0; i< mazeState[i].length; i++){
+            for (let row = mazeState.length - 1; row >= 0; row--) {
+                if (mazeState[row].every(cell => !!cell)) {
+                    for (let r = row; r >= 0; r--) {
+                        for (let c = 0; c < mazeState[r].length; c++) {
+                            mazeState[r][c] = mazeState[r-1][c];
+                            clear = true
+                        }
+                    }
+                }
+            }
+        }
+    if (clear){
+        clearSound.play();
+    }
+
     } else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
-        offset+=1
+        offset+= velocity
     }
 }
 
@@ -188,12 +204,16 @@ function hintergrund() {
     for(let i = 0; i < blocksY; i++) {
         for(let j = 0; j < blocksX; j++) {
             if (mazeState[i][j] === 1) {
-                context.fillStyle = 'grey'
+                // for (let color in colors) {
+                //     context.fillStyle = activeMinos[L]
+                // }
+                  context.fillStyle = color
                 context.fillRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension);
             }
         }
     }
 }
+
 function drawBlock(x, y, block) {
     for(let i = 0; i < block.length; i++) {
         for(let j = 0; j < block[i].length; j++) {
@@ -211,10 +231,36 @@ function debug() {
         frameCount = 0;
         lastTime = currentTime;
     }
+    if (activeMinos === L){
+        context.fillStyle = '#79CDCD'
+         color = '#79CDCD'
+    }
+    if (activeMinos === I){
+        context.fillStyle = '#FF34B3'
+         color = '#FF34B3'
+    }
+    if (activeMinos === J){
+        context.fillStyle = '#FFD700'
+         color = '#FFD700'
+    }
+    if (activeMinos === Z){
+        context.fillStyle = 'green'
+         color = 'green'
+    }
+    if (activeMinos === S){
+        context.fillStyle = 'orange'
+         color = 'orange'
+    }
+    if (activeMinos === T){
+        context.fillStyle = '#8A2BE2'
+         color = '#8A2BE2'
+    }
+    else if (activeMinos === O){
+        context.fillStyle = '#F08080'
+         color = '#F08080'
+    }
 
-    context.fillStyle = 'black'
     context.fillText('FPS: ' + fps, 10, 30);
-
 
     context.fillText('Frame: ' + frameCount, 10, 10)
 }
