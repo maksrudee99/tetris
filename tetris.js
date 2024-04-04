@@ -1,6 +1,6 @@
 const canvas = document.getElementById('canvas')
-document.body.style.backgroundColor = 'black'
 
+document.body.style.backgroundColor = 'black'
 
 let lastTime = Date.now();
 let fps = 0;
@@ -14,6 +14,7 @@ let frameCount = 0
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
+const colors = ['red', 'green', 'blue', 'orange', 'yellow'];
 
 let activeMinos = 0
 let activeColor = ""
@@ -111,7 +112,7 @@ addEventListener('keydown', ({key}) => {
             break
         case 'ArrowDown':
             if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
-                offset+=10
+                offset+=5
                 break
             }
 
@@ -151,7 +152,7 @@ function game()
 
     if (activeMinos === 0 && !gameOver) {
         activeMinos = array[Math.floor(Math.random() * array.length)];
-        activeColor= "#" + Math.floor(Math.random() * 16777215).toString(16);
+        activeColor= colors[Math.floor(Math.random() * colors.length)];
         startBlockX = (canvas.width/2)-60
         startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
         offset = 0
@@ -252,3 +253,4 @@ function debug() {
     context.fillText('Frame: ' + frameCount, 10, 10)
 }
 initGame()
+
