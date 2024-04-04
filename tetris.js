@@ -100,20 +100,48 @@ function game()
         offset = 0
     }
 
-    if(offset<blocksY*blockDimension-activeMinos.length*blockDimension) {
-        drawBlock(startBlockX, startBlockY + offset, activeMinos)
+    // if(offset<blocksY*blockDimension-activeMinos.length*blockDimension) {
+    //     drawBlock(startBlockX, startBlockY + offset, activeMinos)
+    //
+    //     offset+=1
+    // }else if (offset === blocksY * blockDimension - activeMinos.length*blockDimension){
+    //
+    //     let minosPosition = {
+    //         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
+    //         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
+    //     }
+    //
+    //     console.log(minosPosition)
+    //     console.log(activeMinos)
+    //
+    //     for(let i = 0; i < activeMinos.length; i++) {
+    //         for (let j = 0; j < activeMinos[i].length; j++) {
+    //             if (activeMinos[i][j] === 1) {
+    //                 mazeState[minosPosition.y + i][minosPosition.x + j] = 1
+    //             }
+    //         }
+    //     }
+    //
+    //     activeMinos = 0
+    // }
 
-        offset+=1
-    }else if (offset === blocksY * blockDimension - activeMinos.length*blockDimension){
+    let minosPosition = {
+        x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
+        y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
+    }
 
-        let minosPosition = {
-            x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
-            y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
+// Verificăm dacă următorul bloc va cădea pe un bloc existent
+    let canPlaceNextMinos = true;
+    for(let i = 0; i < activeMinos.length; i++) {
+        for (let j = 0; j < activeMinos[i].length; j++) {
+            if (activeMinos[i][j] === 1 && mazeState[minosPosition.y + i + 1] && mazeState[minosPosition.y + i + 1][minosPosition.x + j] === 1) {
+                canPlaceNextMinos = false;
+                break;
+            }
         }
+    }
 
-        console.log(minosPosition)
-        console.log(activeMinos)
-
+    if(!canPlaceNextMinos || offset === blocksY * blockDimension - activeMinos.length*blockDimension) {
         for(let i = 0; i < activeMinos.length; i++) {
             for (let j = 0; j < activeMinos[i].length; j++) {
                 if (activeMinos[i][j] === 1) {
@@ -122,7 +150,14 @@ function game()
             }
         }
 
+        console.log(minosPosition)
+        console.log(activeMinos)
+
         activeMinos = 0
+    } else {
+        drawBlock(startBlockX, startBlockY + offset, activeMinos)
+
+        offset+=1
     }
 }
 
