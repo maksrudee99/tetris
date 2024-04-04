@@ -17,7 +17,6 @@ const blockDimension = 30
 
 let activeMinos = 0
 let activeColor = ""
-
 let mazeState = []
 
 let I = [
@@ -63,33 +62,36 @@ let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 const context = canvas.getContext('2d')
 
-// Adăugați această funcție de rotație în partea de sus a fișierului
+// Füge diese Drehfunktion oben in die Datei ein
 // function rotate(tetrominos) {
 //     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
 // }
+
+
+// Füge diese Drehfunktion oben in die Datei ein
 function rotate(tetrominos) {
-    // Creăm un array gol pentru a stoca noua matrice rotită
+    // Erstellen Sie ein leeres Array, um das neue rotierte Array zu speichern
     let rotatedTetrominos = [];
 
-    // Parcurgem fiecare coloană din matricea originală
+    // Durchlaufen Sie jede Spalte im ursprünglichen Array
     for (let i = 0; i < tetrominos[0].length; i++) {
-        // Creăm un array gol pentru a stoca noul rând
+        // Erstellen Sie ein leeres Array, um die neue Zeile zu speichern
         let newRow = [];
 
-        // Parcurgem fiecare rând din matricea originală
+        // Durchlaufen Sie jede Zeile im ursprünglichen Array
         for (let row = 0; row < tetrominos.length; row++) {
-            // Adăugăm elementul de la poziția curentă la noul rând
+            // Fügen Sie das Element an der aktuellen Position zur neuen Zeile hinzu
             newRow.push(tetrominos[row][i]);
         }
 
-        // Adăugăm noul rând la matricea rotită
+        // Fügen Sie die neue Zeile zum rotierten Array hinzu
         rotatedTetrominos.push(newRow);
     }
 
-    // Inversăm ordinea rândurilor pentru a realiza rotația cu 90 de grade
+    // Kehren Sie die Reihenfolge der Zeilen um, um eine 90-Grad-Drehung zu erreichen
     rotatedTetrominos = rotatedTetrominos.reverse();
 
-    // Returnăm matricea rotită
+    // Geben Sie das rotierte Array zurück
     return rotatedTetrominos;
 }
 addEventListener('keydown', ({key}) => {
@@ -160,7 +162,7 @@ function game()
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
     }
 
-// Verificăm dacă următorul bloc va cădea pe un bloc existent
+// Überprüfe, ob der nächste Block auf einen vorhandenen Block fallen wird
     let canPlaceNextMinos = true;
     for(let i = 0; i < activeMinos.length; i++) {
         for (let j = 0; j < activeMinos[i].length; j++) {
@@ -197,7 +199,7 @@ function hintergrund() {
     let mazeStartX = (canvas.width/2)-(blocksX*blockDimension)/2
     let mazeStartY = (canvas.height/2) - (blocksY*blockDimension)/2
 
-    // Desenarea a 20 linii orizontale
+    // Zeichne 20 horizontale Linien
     for(let i = 0; i <= 20; i++) {
         let y = (canvas.height/2)-(blocksY*blockDimension)/2 + i*blockDimension;
         context.beginPath();
@@ -206,7 +208,7 @@ function hintergrund() {
         context.stroke();
     }
 
-    // Desenarea a 10 linii verticale
+    // Zeichne 10 vertikale Linien
     for(let j = 0; j <= 10; j++) {
         let x = (canvas.width/2)-(blocksX*blockDimension)/2 + j*blockDimension;
         context.beginPath();
@@ -242,11 +244,11 @@ function debug() {
         frameCount = 0;
         lastTime = currentTime;
     }
-
+    // Zeige die FPS an
     context.fillStyle = 'black'
     context.fillText('FPS: ' + fps, 10, 30);
 
-
+    // Zeige die Framezahl an
     context.fillText('Frame: ' + frameCount, 10, 10)
 }
 initGame()
