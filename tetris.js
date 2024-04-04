@@ -17,7 +17,6 @@ const blockDimension = 30
 
 let activeMinos = 0
 let activeColor = ""
-
 let mazeState = []
 
 let I = [
