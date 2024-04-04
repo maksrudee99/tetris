@@ -2,6 +2,16 @@ body {
     overflow: hidden;
 }
 
+.gameOver {
+    position: absolute;
+    top: 45%;
+    right: 100px;
+    transform: translate(-50%, -50%);
+    font-size: 3em; /* Ajustează dimensiunea fontului după preferințe */
+    color: #fff; /* Ajustează culoarea textului după preferințe */
+    text-align: center;
+}
+
 .button-28 {
    position: absolute;
    left: 100px;

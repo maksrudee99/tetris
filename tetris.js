@@ -144,7 +144,7 @@ function game()
 
     for(let i = 0; i < blocksX; i++) {
         if (mazeState[0][i].filled === 1) {
-            console.log("Game Over");
+            document.getElementById("gameOver").innerHTML = "Game Over";
             gameOver = true;
             return;
         }
