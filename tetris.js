@@ -122,7 +122,9 @@ addEventListener('keydown', ({key}) => {
             }else if ((activeMinos.length === 3) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
                 startBlockX = startBlockX -blockDimension
                 activeMinos = rotate(activeMinos);
-            }else {
+            }else if (((offset + 90 < blocksY * blockDimension - activeMinos.length*blockDimension))
+                || ((activeMinos.length === 3) && (offset + 60 < blocksY * blockDimension - activeMinos.length*blockDimension))
+                || ((activeMinos.length === 2) && (offset + 30 < blocksY * blockDimension - activeMinos.length*blockDimension))){
                 activeMinos = rotate(activeMinos);
             }
             break
