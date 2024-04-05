@@ -31,7 +31,7 @@ let mazeState = []
 let clear = false
 const audio = document.getElementById("tetris-soundtrack");
 
-
+let minosPosition = { x: 0, y: 0 };
 
 let I = { name: 'I', shape: [[1, 1, 1, 1]] };
 
@@ -111,8 +111,8 @@ addEventListener('keydown', ({key}) => {
             }
             break
         case 'ArrowDown':
-            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
-                offset+=1
+            if(offset +5 < blocksY * blockDimension - activeMinos.length*blockDimension){
+                offset+=5
             }
             break
         case 'ArrowUp':
@@ -178,7 +178,7 @@ function game()
         offset = 0
     }
 
-    let minosPosition = {
+    minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
     }
@@ -220,7 +220,7 @@ function game()
             }
         }
         if (clear) {
-            // clearSound.play();
+            // clearSound.play()
         }
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
