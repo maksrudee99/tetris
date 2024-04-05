@@ -19,8 +19,8 @@ const colors = ['red', 'green', 'blue', 'orange', 'yellow'];
 let activeMinos = 0
 let activeColor = ""
 let mazeState = []
+
 let clear = false
-let color = ''
 const audio = document.getElementById("tetris-soundtrack");
 
 
@@ -64,8 +64,10 @@ let gameOver = false;
 
 let startBlockX = (canvas.width/2)-60
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
+
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
- const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+
 const context = canvas.getContext('2d')
 
 
@@ -131,12 +133,11 @@ function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
 
-    // console.log(mazeState)
+    console.log(mazeState)
     // audio.play();
-
     game()
     // clearSound.play()
-     backgroundSound.play()
+    //  backgroundSound.play()
 }
 
 // game loop
@@ -189,36 +190,34 @@ function game()
     }
 
     if(!canPlaceNextMinos || offset === blocksY * blockDimension - activeMinos.length*blockDimension) {
-        for(let i = 0; i < activeMinos.length; i++) {
+        for (let i = 0; i < activeMinos.length; i++) {
             for (let j = 0; j < activeMinos[i].length; j++) {
                 if (activeMinos[i][j] === 1) {
-                    mazeState[minosPosition.y + i][minosPosition.x + j] = { filled: 1, color: activeColor };
+                    mazeState[minosPosition.y + i][minosPosition.x + j] = {filled: 1, color: activeColor};
                 }
             }
         }
 
-        // console.log(minosPosition)
-        // console.log(activeMinos)
-        console.log(array)
+        console.log(minosPosition)
+        console.log(activeMinos)
+        // console.log(array)
         activeMinos = 0
 
-        for (i = 0; i< mazeState[i].length; i++){
-            for (let row = mazeState.length - 1; row >= 0; row--) {
-                if (mazeState[row].every(cell => !!cell)) {
-                    for (let r = row; r >= 0; r--) {
-                        for (let c = 0; c < mazeState[r].length; c++) {
-                            mazeState[r][c] = mazeState[r-1][c];
-                            clear = true
-                        }
+        for (let row = mazeState.length - 1; row >= 0; row--) {
+            if (mazeState[row].every(cell => !!cell.filled)) {
+                for (let r = row; r > 0; r--) {
+                    for (let c = 0; c < mazeState[r].length; c++) {
+                        mazeState[r][c] = mazeState[r - 1][c];
                     }
                 }
+                mazeState[0] = Array(blocksX).fill({ filled: 0, color: "" });
+                clear = true;
             }
         }
-    if (clear){
-        clearSound.play();
-    }
-
-    } else {
+        if (clear) {
+            clearSound.play();
+        }
+    }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
         offset+= 1
