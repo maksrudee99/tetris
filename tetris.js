@@ -14,8 +14,16 @@ let frameCount = 0
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
-const colors = ['red', 'green', 'blue', 'orange', 'yellow'];
-
+const colors = {
+    I: 'cyan',
+    J: 'blue',
+    L: 'orange',
+    O: 'yellow',
+    S: 'green',
+    T: 'purple',
+    Z: 'red'
+};
+let chosenTetrominos = 0
 let activeMinos = 0
 let activeColor = ""
 let mazeState = []
@@ -24,40 +32,14 @@ let clear = false
 const audio = document.getElementById("tetris-soundtrack");
 
 
-let I = [
-    [1, 1, 1, 1]
-];
 
-let J = [
-    [1, 0, 0],
-    [1, 1, 1]
-];
-
-let L = [
-    [0, 0, 1],
-    [1, 1, 1]
-];
-
-let O = [
-    [1, 1],
-    [1, 1]
-];
-
-let S = [
-    [0, 1, 1],
-    [1, 1, 0]
-];
-
-let T = [
-    [0, 1, 0],
-    [1, 1, 1]
-];
-
-let Z = [
-    [1, 1, 0],
-    [0, 1, 1],
-];
-
+let I = { name: 'I', shape: [[1, 1, 1, 1]] };
+let J = { name: 'J', shape: [[1, 0, 0], [1, 1, 1]] };
+let L = { name: 'L', shape: [[0, 0, 1], [1, 1, 1]] };
+let O = { name: 'O', shape: [[1, 1], [1, 1]] };
+let S = { name: 'S', shape: [[0, 1, 1], [1, 1, 0]] };
+let T = { name: 'T', shape: [[0, 1, 0], [1, 1, 1]] };
+let Z = { name: 'Z', shape: [[1, 1, 0], [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
 let gameOver = false;
@@ -166,8 +148,9 @@ function game()
     }
 
     if (activeMinos === 0 && !gameOver) {
-        activeMinos = array[Math.floor(Math.random() * array.length)];
-        activeColor= colors[Math.floor(Math.random() * colors.length)];
+        chosenTetrominos = array[Math.floor(Math.random() * array.length)];
+        activeMinos = chosenTetrominos.shape;
+        activeColor = colors[chosenTetrominos.name];
         startBlockX = (canvas.width/2)-60
         startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
         offset = 0
@@ -215,7 +198,7 @@ function game()
             }
         }
         if (clear) {
-            clearSound.play();
+            // clearSound.play();
         }
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
