@@ -19,15 +19,6 @@ let mazeState = []
 let clear = false
 let color = ''
 const audio = document.getElementById("tetris-soundtrack");
-const colors = {
-    'I': 'cyan',
-    'O': 'yellow',
-    'T': 'purple',
-    'S': 'green',
-    'Z': 'red',
-    'J': 'blue',
-    'L': 'orange'
-};
 
 
 let I = [
@@ -98,15 +89,15 @@ function initGame()
 
     game()
     // clearSound.play()
-    // backgroundSound.play()
+     backgroundSound.play()
 }
 
 // game loop
 function game()
 {
-const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-audio.addEventListener("canplaythrough",() => audio.play())
-    // document.getElementById('tetris-soundtrack').play();
+// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+// audio.addEventListener("canplaythrough",() => audio.play())
+//     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
     window.requestAnimationFrame(game)
 
@@ -144,7 +135,6 @@ audio.addEventListener("canplaythrough",() => audio.play())
             for (let j = 0; j < activeMinos[i].length; j++) {
                 if (activeMinos[i][j] === 1) {
                     mazeState[minosPosition.y + i][minosPosition.x + j] = 1
-                    velocity = 1;
                 }
             }
         }
@@ -173,7 +163,7 @@ audio.addEventListener("canplaythrough",() => audio.play())
     } else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
-        offset+= velocity
+        offset+= 1
     }
 }
 
@@ -230,34 +220,6 @@ function debug() {
         fps = frameCount;
         frameCount = 0;
         lastTime = currentTime;
-    }
-    if (activeMinos === L){
-        context.fillStyle = '#79CDCD'
-         color = '#79CDCD'
-    }
-    if (activeMinos === I){
-        context.fillStyle = '#FF34B3'
-         color = '#FF34B3'
-    }
-    if (activeMinos === J){
-        context.fillStyle = '#FFD700'
-         color = '#FFD700'
-    }
-    if (activeMinos === Z){
-        context.fillStyle = 'green'
-         color = 'green'
-    }
-    if (activeMinos === S){
-        context.fillStyle = 'orange'
-         color = 'orange'
-    }
-    if (activeMinos === T){
-        context.fillStyle = '#8A2BE2'
-         color = '#8A2BE2'
-    }
-    else if (activeMinos === O){
-        context.fillStyle = '#F08080'
-         color = '#F08080'
     }
 
     context.fillText('FPS: ' + fps, 10, 30);
