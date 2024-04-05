@@ -34,12 +34,24 @@ const audio = document.getElementById("tetris-soundtrack");
 
 
 let I = { name: 'I', shape: [[1, 1, 1, 1]] };
-let J = { name: 'J', shape: [[1, 0, 0], [1, 1, 1]] };
-let L = { name: 'L', shape: [[0, 0, 1], [1, 1, 1]] };
-let O = { name: 'O', shape: [[1, 1], [1, 1]] };
-let S = { name: 'S', shape: [[0, 1, 1], [1, 1, 0]] };
-let T = { name: 'T', shape: [[0, 1, 0], [1, 1, 1]] };
-let Z = { name: 'Z', shape: [[1, 1, 0], [0, 1, 1]] };
+
+let J = { name: 'J', shape: [[1, 0, 0],
+                                                   [1, 1, 1]] };
+
+let L = { name: 'L', shape: [[0, 0, 1],
+                                                   [1, 1, 1]] };
+
+let O = { name: 'O', shape: [[1, 1],
+                                                   [1, 1]] };
+
+let S = { name: 'S', shape: [[0, 1, 1],
+                                                   [1, 1, 0]] };
+
+let T = { name: 'T', shape: [[0, 1, 0],
+                                                   [1, 1, 1]] };
+
+let Z = { name: 'Z', shape: [[1, 1, 0],
+                                                   [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
 let gameOver = false;
@@ -90,25 +102,25 @@ addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
             if ((startBlockX>(canvas.width/2)-(blocksX*blockDimension)/2) && offset<blocksY*blockDimension-31){
-                startBlockX-=30
+                startBlockX-=blockDimension
             }
             break
         case 'ArrowRight':
             if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && (offset<blocksY*blockDimension-31)){
-                startBlockX+=30
+                startBlockX+=blockDimension
             }
             break
         case 'ArrowDown':
             if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
-                offset+=5
+                offset+=1
             }
             break
         case 'ArrowUp':
-            if ((activeMinos.length === 4) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
-                startBlockX = startBlockX -90
+            if ((activeMinos.length === 4) && (startBlockX+60>=(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
+                startBlockX = startBlockX -(blockDimension*3)
                 activeMinos = rotate(activeMinos);
             }else if ((activeMinos.length === 3) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
-                startBlockX = startBlockX -30
+                startBlockX = startBlockX -blockDimension
                 activeMinos = rotate(activeMinos);
             }else {
                 activeMinos = rotate(activeMinos);
@@ -159,7 +171,7 @@ function game()
         chosenTetrominos = array[Math.floor(Math.random() * array.length)];
         activeMinos = chosenTetrominos.shape;
         activeColor = colors[chosenTetrominos.name];
-        startBlockX = (canvas.width/2)-60
+        startBlockX = (canvas.width/2)-(blockDimension*2)
         startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
         offset = 0
     }
