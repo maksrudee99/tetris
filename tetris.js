@@ -19,6 +19,10 @@ const colors = ['red', 'green', 'blue', 'orange', 'yellow'];
 let activeMinos = 0
 let activeColor = ""
 let mazeState = []
+let clear = false
+let color = ''
+const audio = document.getElementById("tetris-soundtrack");
+
 
 let I = [
     [1, 1, 1, 1]
@@ -60,7 +64,8 @@ let gameOver = false;
 
 let startBlockX = (canvas.width/2)-60
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
-
+const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
+ const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
 const context = canvas.getContext('2d')
 
 // Füge diese Drehfunktion oben in die Datei ein
@@ -124,14 +129,21 @@ function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
 
-    console.log(mazeState)
+    // console.log(mazeState)
+    // audio.play();
 
     game()
+    // clearSound.play()
+    // backgroundSound.play()
 }
 
 // game loop
 function game()
 {
+const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+audio.addEventListener("canplaythrough",() => audio.play())
+    // document.getElementById('tetris-soundtrack').play();
+// clearSound.play();
     window.requestAnimationFrame(game)
 
     context.reset()
@@ -183,14 +195,31 @@ function game()
             }
         }
 
-        console.log(minosPosition)
-        console.log(activeMinos)
-
+        // console.log(minosPosition)
+        // console.log(activeMinos)
+        console.log(array)
         activeMinos = 0
+
+        for (i = 0; i< mazeState[i].length; i++){
+            for (let row = mazeState.length - 1; row >= 0; row--) {
+                if (mazeState[row].every(cell => !!cell)) {
+                    for (let r = row; r >= 0; r--) {
+                        for (let c = 0; c < mazeState[r].length; c++) {
+                            mazeState[r][c] = mazeState[r-1][c];
+                            clear = true
+                        }
+                    }
+                }
+            }
+        }
+    if (clear){
+        clearSound.play();
+    }
+
     } else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
-        offset+=1
+        offset+= 1
     }
 }
 
@@ -227,6 +256,7 @@ function hintergrund() {
         }
     }
 }
+
 function drawBlock(x, y, block) {
     for(let i = 0; i < block.length; i++) {
         for(let j = 0; j < block[i].length; j++) {
