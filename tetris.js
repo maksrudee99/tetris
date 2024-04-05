@@ -94,18 +94,26 @@ addEventListener('keydown', ({key}) => {
             }
             break
         case 'ArrowRight':
-            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && offset<blocksY*blockDimension-31){
+            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && (offset<blocksY*blockDimension-31)){
                 startBlockX+=30
             }
-            break
-        case 'ArrowUp':
-            activeMinos = rotate(activeMinos);
             break
         case 'ArrowDown':
             if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
                 offset+=5
-                break
             }
+            break
+        case 'ArrowUp':
+            if ((activeMinos.length === 4) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
+                startBlockX = startBlockX -90
+                activeMinos = rotate(activeMinos);
+            }else if ((activeMinos.length === 3) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
+                startBlockX = startBlockX -30
+                activeMinos = rotate(activeMinos);
+            }else {
+                activeMinos = rotate(activeMinos);
+            }
+            break
 
     }
 });
@@ -262,7 +270,7 @@ function debug() {
     }
 
     // Zeige die FPS an
-    context.fillStyle = 'black'
+    context.fillStyle = 'white'
     context.fillText('FPS: ' + fps, 10, 30);
 
     // Zeige die Framezahl an
