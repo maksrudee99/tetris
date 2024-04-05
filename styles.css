@@ -7,8 +7,8 @@ body {
     top: 45%;
     right: 100px;
     transform: translate(-50%, -50%);
-    font-size: 3em; /* Ajustează dimensiunea fontului după preferințe */
-    color: #fff; /* Ajustează culoarea textului după preferințe */
+    font-size: 3em;
+    color: #fff;
     text-align: center;
 }
 
