@@ -134,15 +134,15 @@ function initGame()
 
     game()
     // clearSound.play()
-    // backgroundSound.play()
+     backgroundSound.play()
 }
 
 // game loop
 function game()
 {
-const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-audio.addEventListener("canplaythrough",() => audio.play())
-    // document.getElementById('tetris-soundtrack').play();
+// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+// audio.addEventListener("canplaythrough",() => audio.play())
+//     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
     window.requestAnimationFrame(game)
 
@@ -249,6 +249,7 @@ function hintergrund() {
 
     for(let i = 0; i < blocksY; i++) {
         for(let j = 0; j < blocksX; j++) {
+
             if (mazeState[i][j].filled === 1) {
                 context.fillStyle = mazeState[i][j].color;
                 context.fillRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension);
@@ -275,11 +276,13 @@ function debug() {
         frameCount = 0;
         lastTime = currentTime;
     }
+
     // Zeige die FPS an
     context.fillStyle = 'black'
     context.fillText('FPS: ' + fps, 10, 30);
 
     // Zeige die Framezahl an
+
     context.fillText('Frame: ' + frameCount, 10, 10)
 }
 initGame()
