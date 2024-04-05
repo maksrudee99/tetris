@@ -98,14 +98,14 @@ function initGame()
 
     game()
     // clearSound.play()
-    backgroundSound.play()
+    // backgroundSound.play()
 }
 
 // game loop
 function game()
 {
-// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-// audio.addEventListener("canplaythrough",() => audio.play())
+const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+audio.addEventListener("canplaythrough",() => audio.play())
     // document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
     window.requestAnimationFrame(game)
