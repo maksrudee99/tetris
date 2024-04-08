@@ -61,15 +61,24 @@ let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
 const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-
+backgroundSound.loop = true;
 const context = canvas.getContext('2d')
+
+const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
+gameOverSound.loop = false;
+gameOverSound.addEventListener('ended', function () {
+    this.currentTime = 0;
+    this.pause();
+}, false);
+// gameOverSound.loop = false;
+
 
 
 // Füge diese Drehfunktion oben in die Datei ein
 // function rotate(tetrominos) {
 //     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
 // }
-
+let gameOverSoundPlayed = false;
 
 // Füge diese Drehfunktion oben in die Datei ein
 function rotate(tetrominos) {
@@ -165,8 +174,17 @@ function game()
         if (mazeState[0][i].filled === 1) {
             document.getElementById("gameOver").innerHTML = "Game Over";
             gameOver = true;
-            return;
+            backgroundSound.pause();
+            backgroundSound.currentTime = 0;
+            break;
         }
+    }
+    if (gameOver) {
+        if (!gameOverSoundPlayed) {
+            gameOverSound.play();
+            gameOverSoundPlayed = true;
+        }
+        return;
     }
 
     if (activeMinos === 0 && !gameOver) {
@@ -208,20 +226,49 @@ function game()
         // console.log(array)
         activeMinos = 0
 
-        for (let row = mazeState.length - 1; row >= 0; row--) {
+        let fullRows = [];
+
+// Find all full rows.
+        for (let row = 0; row < mazeState.length; row++) {
             if (mazeState[row].every(cell => !!cell.filled)) {
-                for (let r = row; r > 0; r--) {
-                    for (let c = 0; c < mazeState[r].length; c++) {
-                        mazeState[r][c] = mazeState[r - 1][c];
-                    }
-                }
-                mazeState[0] = Array(blocksX).fill({ filled: 0, color: "" });
-                clear = true;
+                fullRows.unshift(row);
             }
         }
-        if (clear) {
+
+// Remove all full rows.
+        fullRows.forEach((fullRow) => {
+            mazeState.splice(fullRow, 1);
+            mazeState.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
+        });
+
+// Play the clear sound if any rows were cleared.
+        if (fullRows.length > 0) {
             clearSound.play();
         }
+// Play the clear sound if any rows were cleared.
+
+
+
+
+
+        // for (let row = mazeState.length - 1; row >= 0; row--) {
+        //     if (mazeState[row].every(cell => !!cell.filled)) {
+        //         for (let r = row; r > 0; r--) {
+        //             for (let c = 0; c < mazeState[r].length; c++) {
+        //                 mazeState[r][c] = mazeState[r - 1][c];
+        //             }
+        //         }
+        //         mazeState[0] = Array(blocksX).fill({ filled: 0, color: "" });
+        //         clear = true;
+        //         clearSound.play();
+        //     }
+        // }
+
+        // let soundPlayed = false
+        // if (clear && !soundPlayed) {
+        //
+        //     soundPlayed = true
+        // }
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
