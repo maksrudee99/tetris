@@ -16,12 +16,12 @@ const blocksY = 20
 const blockDimension = 30
 const colors = {
     I: 'cyan',
-    J: 'blue',
-    L: 'orange',
-    O: 'yellow',
-    S: 'green',
-    T: 'purple',
-    Z: 'red'
+    J: '#FF69B4',
+    L: '#FF7F00',
+    O: '#FFD700',
+    S: 'red',
+    T: '#A020F0',
+    Z: '#7FFF00'
 };
 let chosenTetrominos = 0
 let activeMinos = 0
@@ -258,49 +258,23 @@ function game()
         // console.log(array)
         activeMinos = 0
 
-        let fullRows = [];
-
-// Find all full rows.
-        for (let row = 0; row < mazeState.length; row++) {
-            if (mazeState[row].every(cell => !!cell.filled)) {
-                fullRows.unshift(row);
-            }
+        function isRowFull(row) {
+            return row.every(cell => cell.filled === 1);
         }
 
-// Remove all full rows.
-        fullRows.forEach((fullRow) => {
-            mazeState.splice(fullRow, 1);
-            mazeState.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
-        });
-
-// Play the clear sound if any rows were cleared.
-//         if (fullRows.length > 0) {
-//             // clearSound.play();
-//         }
-// Play the clear sound if any rows were cleared.
-
-
-
-
-
-        // for (let row = mazeState.length - 1; row >= 0; row--) {
-        //     if (mazeState[row].every(cell => !!cell.filled)) {
-        //         for (let r = row; r > 0; r--) {
-        //             for (let c = 0; c < mazeState[r].length; c++) {
-        //                 mazeState[r][c] = mazeState[r - 1][c];
-        //             }
-        //         }
-        //         mazeState[0] = Array(blocksX).fill({ filled: 0, color: "" });
-        //         clear = true;
-        //         clearSound.play();
-        //     }
-        // }
-
-        // let soundPlayed = false
-        // if (clear && !soundPlayed) {
-        //
-        //     soundPlayed = true
-        // }
+        function removeFullRows() {
+            let originalRows = mazeState.length;
+            let incompleteRows = mazeState.filter(row => !isRowFull(row));
+            let numberOfRowsToAdd = originalRows - incompleteRows.length;
+            if (numberOfRowsToAdd > 0) {
+                clearSound.play();
+                for (let i = 0; i < numberOfRowsToAdd; i++) {
+                    incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
+                }
+            }
+            mazeState = incompleteRows;
+        }
+        removeFullRows();
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
@@ -312,6 +286,8 @@ function hintergrund() {
 
     let mazeStartX = (canvas.width/2)-(blocksX*blockDimension)/2
     let mazeStartY = (canvas.height/2) - (blocksY*blockDimension)/2
+
+    context.fillRect(mazeStartX, mazeStartY, blocksX*blockDimension, blocksY*blockDimension)
 
     // Zeichne 20 horizontale Linien
     for(let i = 0; i <= 20; i++) {
