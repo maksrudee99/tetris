@@ -54,6 +54,8 @@ let Z = { name: 'Z', shape: [[1, 1, 0],
                                                    [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
+let gameStarted = false;
+
 let gameOver = false;
 
 let startBlockX = (canvas.width/2)-(blockDimension*2)
@@ -79,6 +81,19 @@ gameOverSound.addEventListener('ended', function () {
 //     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
 // }
 let gameOverSoundPlayed = false;
+
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x+r, y);
+    this.arcTo(x+w, y,   x+w, y+h, r);
+    this.arcTo(x+w, y+h, x,   y+h, r);
+    this.arcTo(x,   y+h, x,   y,   r);
+    this.arcTo(x,   y,   x+w, y,   r);
+    this.closePath();
+    return this;
+}
 
 // Füge diese Drehfunktion oben in die Datei ein
 function rotate(tetrominos) {
@@ -150,7 +165,21 @@ function initGame()
     // audio.play();
     game()
     // clearSound.play()
-    //  backgroundSound.play()
+    let playButton = document.getElementById('startButton');
+    playButton.addEventListener('click', function() {
+        // Reset mazeState
+        mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
+
+        // Reset game variables
+        gameOver = false;
+        gameStarted = true;
+        gameOverSoundPlayed = false;
+
+        // Optionally, you can also reset the score here, if you have a scoring system
+
+        // Start the game
+        // backgroundSound.play();
+    });
 }
 
 // game loop
@@ -171,29 +200,32 @@ function game()
     debug()
 
     for(let i = 0; i < blocksX; i++) {
-        if (mazeState[0][i].filled === 1) {
+        if (mazeState[1][i].filled === 1) {
             document.getElementById("gameOver").innerHTML = "Game Over";
             gameOver = true;
             backgroundSound.pause();
             backgroundSound.currentTime = 0;
             break;
+        }else {
+            document.getElementById("gameOver").innerHTML = "";
         }
     }
     if (gameOver) {
         if (!gameOverSoundPlayed) {
-            gameOverSound.play();
+            // gameOverSound.play();
             gameOverSoundPlayed = true;
         }
-        return;
     }
 
-    if (activeMinos === 0 && !gameOver) {
-        chosenTetrominos = array[Math.floor(Math.random() * array.length)];
-        activeMinos = chosenTetrominos.shape;
-        activeColor = colors[chosenTetrominos.name];
-        startBlockX = (canvas.width/2)-(blockDimension*2)
-        startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
-        offset = 0
+    if (gameStarted) {
+        if (activeMinos === 0 && !gameOver) {
+            chosenTetrominos = array[Math.floor(Math.random() * array.length)];
+            activeMinos = chosenTetrominos.shape;
+            activeColor = colors[chosenTetrominos.name];
+            startBlockX = (canvas.width/2)-(blockDimension*2)
+            startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
+            offset = 0
+        }
     }
 
     minosPosition = {
@@ -242,9 +274,9 @@ function game()
         });
 
 // Play the clear sound if any rows were cleared.
-        if (fullRows.length > 0) {
-            clearSound.play();
-        }
+//         if (fullRows.length > 0) {
+//             // clearSound.play();
+//         }
 // Play the clear sound if any rows were cleared.
 
 
@@ -304,7 +336,12 @@ function hintergrund() {
 
             if (mazeState[i][j].filled === 1) {
                 context.fillStyle = mazeState[i][j].color;
-                context.fillRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension);
+                context.roundRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension, 5).fill();
+
+                // Add a white border around the block
+                context.strokeStyle = 'white';
+                context.lineWidth = 2;
+                context.roundRect(mazeStartX+(j * blockDimension), mazeStartY + (i * blockDimension), blockDimension, blockDimension, 5).stroke();
             }
         }
     }
@@ -314,8 +351,13 @@ function drawBlock(x, y, block) {
     for(let i = 0; i < block.length; i++) {
         for(let j = 0; j < block[i].length; j++) {
             if(block[i][j] === 1) {
+
                 context.fillStyle = activeColor;
-                context.fillRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension);
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).fill();
+
+                context.strokeStyle = 'white';
+                context.lineWidth = 2;
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).stroke();
 
             }
         }
