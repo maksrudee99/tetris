@@ -57,7 +57,7 @@ const array = [I, J, L, O, S, T, Z];
 let gameStarted = false;
 
 let gameOver = false;
-
+let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
@@ -174,12 +174,13 @@ function initGame()
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
-
+        score = 0;
         // Optionally, you can also reset the score here, if you have a scoring system
 
         // Start the game
         // backgroundSound.play();
     });
+
 }
 
 // game loop
@@ -190,7 +191,7 @@ function game()
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
     window.requestAnimationFrame(game)
-
+    document.getElementById("score").innerHTML = "Score: " + score;
     context.reset()
 
     hintergrund()
@@ -268,6 +269,7 @@ function game()
             let numberOfRowsToAdd = originalRows - incompleteRows.length;
             if (numberOfRowsToAdd > 0) {
                 clearSound.play();
+                score += numberOfRowsToAdd
                 for (let i = 0; i < numberOfRowsToAdd; i++) {
                     incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
                 }
