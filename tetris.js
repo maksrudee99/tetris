@@ -31,21 +31,21 @@ let mazeState = []
 let clear = false
 const audio = document.getElementById("tetris-soundtrack");
 
+let minosPosition = { x: 0, y: 0 };
 
-
-let I = { name: 'I', shape: [[1, 1, 1, 1]] };
+let I = { name: 'I', shape: [[1, 1, 1, 1],] };
 
 let J = { name: 'J', shape: [[1, 0, 0],
-                                                   [1, 1, 1]] };
+                                                   [1, 1, 1],] };
 
 let L = { name: 'L', shape: [[0, 0, 1],
-                                                   [1, 1, 1]] };
+                                                   [1, 1, 1],] };
 
 let O = { name: 'O', shape: [[1, 1],
-                                                   [1, 1]] };
+                                                   [1, 1],] };
 
 let S = { name: 'S', shape: [[0, 1, 1],
-                                                   [1, 1, 0]] };
+                                                   [1, 1, 0],] };
 
 let T = { name: 'T', shape: [[0, 1, 0],
                                                    [1, 1, 1]] };
@@ -56,7 +56,7 @@ const array = [I, J, L, O, S, T, Z];
 
 let gameOver = false;
 
-let startBlockX = (canvas.width/2)-60
+let startBlockX = (canvas.width/2)-(blockDimension*2)
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
@@ -97,7 +97,7 @@ function rotate(tetrominos) {
     // Geben Sie das rotierte Array zurück
     return rotatedTetrominos;
 }
-
+let anzahl = 0;
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
@@ -111,8 +111,8 @@ addEventListener('keydown', ({key}) => {
             }
             break
         case 'ArrowDown':
-            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
-                offset+=1
+            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension) {
+                offset += 30
             }
             break
         case 'ArrowUp':
@@ -178,7 +178,7 @@ function game()
         offset = 0
     }
 
-    let minosPosition = {
+    minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
     }
@@ -220,12 +220,11 @@ function game()
             }
         }
         if (clear) {
-            // clearSound.play();
+            // clearSound.play()
         }
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
-        offset+= 1
     }
 }
 
@@ -281,6 +280,8 @@ function debug() {
         fps = frameCount;
         frameCount = 0;
         lastTime = currentTime;
+        offset+= 30;
+
     }
 
     // Zeige die FPS an
