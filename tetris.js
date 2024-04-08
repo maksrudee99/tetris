@@ -14,8 +14,16 @@ let frameCount = 0
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
-const colors = ['red', 'green', 'blue', 'orange', 'yellow'];
-
+const colors = {
+    I: 'cyan',
+    J: 'blue',
+    L: 'orange',
+    O: 'yellow',
+    S: 'green',
+    T: 'purple',
+    Z: 'red'
+};
+let chosenTetrominos = 0
 let activeMinos = 0
 let activeColor = ""
 let mazeState = []
@@ -23,52 +31,39 @@ let mazeState = []
 let clear = false
 const audio = document.getElementById("tetris-soundtrack");
 
+let minosPosition = { x: 0, y: 0 };
 
-let I = [
-    [1, 1, 1, 1]
-];
+let I = { name: 'I', shape: [[1, 1, 1, 1],] };
 
-let J = [
-    [1, 0, 0],
-    [1, 1, 1]
-];
+let J = { name: 'J', shape: [[1, 0, 0],
+                                                   [1, 1, 1],] };
 
-let L = [
-    [0, 0, 1],
-    [1, 1, 1]
-];
+let L = { name: 'L', shape: [[0, 0, 1],
+                                                   [1, 1, 1],] };
 
-let O = [
-    [1, 1],
-    [1, 1]
-];
+let O = { name: 'O', shape: [[1, 1],
+                                                   [1, 1],] };
 
-let S = [
-    [0, 1, 1],
-    [1, 1, 0]
-];
+let S = { name: 'S', shape: [[0, 1, 1],
+                                                   [1, 1, 0],] };
 
-let T = [
-    [0, 1, 0],
-    [1, 1, 1]
-];
+let T = { name: 'T', shape: [[0, 1, 0],
+                                                   [1, 1, 1]] };
 
-let Z = [
-    [1, 1, 0],
-    [0, 1, 1],
-];
-
+let Z = { name: 'Z', shape: [[1, 1, 0],
+                                                   [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
 let gameOver = false;
 
-let startBlockX = (canvas.width/2)-60
+let startBlockX = (canvas.width/2)-(blockDimension*2)
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
 const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
 
 const context = canvas.getContext('2d')
+
 
 // Füge diese Drehfunktion oben in die Datei ein
 // function rotate(tetrominos) {
@@ -102,26 +97,37 @@ function rotate(tetrominos) {
     // Geben Sie das rotierte Array zurück
     return rotatedTetrominos;
 }
+
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
             if ((startBlockX>(canvas.width/2)-(blocksX*blockDimension)/2) && offset<blocksY*blockDimension-31){
-                startBlockX-=30
+                startBlockX-=blockDimension
             }
             break
         case 'ArrowRight':
-            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && offset<blocksY*blockDimension-31){
-                startBlockX+=30
+            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && (offset<blocksY*blockDimension-31)){
+                startBlockX+=blockDimension
+            }
+            break
+        case 'ArrowDown':
+            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension) {
+                offset += 30
             }
             break
         case 'ArrowUp':
-            activeMinos = rotate(activeMinos);
-            break
-        case 'ArrowDown':
-            if(offset < blocksY * blockDimension - activeMinos.length*blockDimension){
-                offset+=5
-                break
+            if ((activeMinos.length === 4) && (startBlockX+60>=(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
+                startBlockX = startBlockX -(blockDimension*3)
+                activeMinos = rotate(activeMinos);
+            }else if ((activeMinos.length === 3) && (startBlockX===(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension))) {
+                startBlockX = startBlockX -blockDimension
+                activeMinos = rotate(activeMinos);
+            }else if (((offset + 90 < blocksY * blockDimension - activeMinos.length*blockDimension))
+                || ((activeMinos.length === 3) && (offset + 60 < blocksY * blockDimension - activeMinos.length*blockDimension))
+                || ((activeMinos.length === 2) && (offset + 30 < blocksY * blockDimension - activeMinos.length*blockDimension))){
+                activeMinos = rotate(activeMinos);
             }
+            break
 
     }
 });
@@ -164,14 +170,15 @@ function game()
     }
 
     if (activeMinos === 0 && !gameOver) {
-        activeMinos = array[Math.floor(Math.random() * array.length)];
-        activeColor= colors[Math.floor(Math.random() * colors.length)];
-        startBlockX = (canvas.width/2)-60
+        chosenTetrominos = array[Math.floor(Math.random() * array.length)];
+        activeMinos = chosenTetrominos.shape;
+        activeColor = colors[chosenTetrominos.name];
+        startBlockX = (canvas.width/2)-(blockDimension*2)
         startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
         offset = 0
     }
 
-    let minosPosition = {
+    minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
     }
@@ -218,7 +225,6 @@ function game()
     }else {
         drawBlock(startBlockX, startBlockY + offset, activeMinos)
 
-        offset+= 1
     }
 }
 
@@ -274,10 +280,12 @@ function debug() {
         fps = frameCount;
         frameCount = 0;
         lastTime = currentTime;
+        offset+= 30;
+
     }
 
     // Zeige die FPS an
-    context.fillStyle = 'black'
+    context.fillStyle = 'white'
     context.fillText('FPS: ' + fps, 10, 30);
 
     // Zeige die Framezahl an
