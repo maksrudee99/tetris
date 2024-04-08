@@ -63,6 +63,7 @@ const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
 const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
 backgroundSound.loop = true;
 const context = canvas.getContext('2d')
+
 const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
 gameOverSound.loop = false;
 gameOverSound.addEventListener('ended', function () {
@@ -70,6 +71,9 @@ gameOverSound.addEventListener('ended', function () {
     this.pause();
 }, false);
 // gameOverSound.loop = false;
+
+
+
 // Füge diese Drehfunktion oben in die Datei ein
 // function rotate(tetrominos) {
 //     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
