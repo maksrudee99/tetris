@@ -95,6 +95,33 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     return this;
 }
 
+let nextTetromino = null; // Pasul 1
+
+function generateTetromino() { // Pasul 2
+    if (nextTetromino === null) {
+        nextTetromino = array[Math.floor(Math.random() * array.length)];
+    }
+    let currentTetromino = nextTetromino;
+    nextTetromino = array[Math.floor(Math.random() * array.length)];
+    return currentTetromino;
+}
+
+function drawNextTetromino() { // Pasul 3
+    let x = canvas.width/2-60; // Coordonatele unde vrei să desenezi următorul tetromino
+    let y = 50;
+    for(let i = 0; i < nextTetromino.shape.length; i++) {
+        for(let j = 0; j < nextTetromino.shape[i].length; j++) {
+            if(nextTetromino.shape[i][j] === 1) {
+                context.fillStyle = colors[nextTetromino.name];
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).fill();
+                context.strokeStyle = 'white';
+                context.lineWidth = 2;
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).stroke();
+            }
+        }
+    }
+}
+
 // Füge diese Drehfunktion oben in die Datei ein
 function rotate(tetrominos) {
     // Erstellen Sie ein leeres Array, um das neue rotierte Array zu speichern
@@ -174,6 +201,7 @@ function initGame()
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
+        offset=0;
 
         // Optionally, you can also reset the score here, if you have a scoring system
 
@@ -219,13 +247,14 @@ function game()
 
     if (gameStarted) {
         if (activeMinos === 0 && !gameOver) {
-            chosenTetrominos = array[Math.floor(Math.random() * array.length)];
+            chosenTetrominos = generateTetromino();
             activeMinos = chosenTetrominos.shape;
             activeColor = colors[chosenTetrominos.name];
             startBlockX = (canvas.width/2)-(blockDimension*2)
             startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
             offset = 0
         }
+        drawNextTetromino();
     }
 
     minosPosition = {
