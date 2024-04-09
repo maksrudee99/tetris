@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas')
 
 document.body.style.backgroundColor = 'black'
-
+// const fs = require('fs');
 let lastTime = Date.now();
 let fps = 0;
 
@@ -10,7 +10,6 @@ canvas.height = window.innerHeight
 
 let offset = 0
 let frameCount = 0
-
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
@@ -190,8 +189,16 @@ function game()
 // audio.addEventListener("canplaythrough",() => audio.play())
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
+
     window.requestAnimationFrame(game)
     document.getElementById("score").innerHTML = "Score: " + score;
+    highscore = JSON.parse(localStorage.getItem("highscore"))
+    if(highscore === null) {
+        highscore = "No highscore yet!";
+    } else {
+        highscore = JSON.parse(highscore);
+    }
+    document.getElementById("highscore").innerHTML = name + "'s Highscore: " + highscore;
     context.reset()
 
     hintergrund()
@@ -212,6 +219,7 @@ function game()
         }
     }
     if (gameOver) {
+        localStorage.setItem("highscore", JSON.stringify(score));
         if (!gameOverSoundPlayed) {
             // gameOverSound.play();
             gameOverSoundPlayed = true;
