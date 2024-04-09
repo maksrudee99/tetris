@@ -1,15 +1,12 @@
 const canvas = document.getElementById('canvas')
 
 document.body.style.backgroundColor = 'black'
-// const fs = require('fs');
-let lastTime = Date.now();
-let fps = 0;
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-let offset = 0
-let frameCount = 0
+const context = canvas.getContext('2d')
+
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
@@ -22,15 +19,23 @@ const colors = {
     T: '#A020F0',
     Z: '#7FFF00'
 };
+const audio = document.getElementById("tetris-soundtrack");
+const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
+const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
+const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
+
+let lastTime = Date.now();
+let fps = 0;
+let offset = 0
+let frameCount = 0
+
 let chosenTetrominos = 0
 let activeMinos = 0
 let activeColor = ""
-let mazeState = []
-
-let clear = false
-const audio = document.getElementById("tetris-soundtrack");
-
 let minosPosition = { x: 0, y: 0 };
+let nextTetromino = null;
+
+let mazeState = []
 
 let I = { name: 'I', shape: [[1, 1, 1, 1],] };
 
@@ -53,73 +58,29 @@ let Z = { name: 'Z', shape: [[1, 1, 0],
                                                    [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
+let clear = false
+
 let gameStarted = false;
 
 let gameOver = false;
+
+backgroundSound.loop = true;
+
+gameOverSound.loop = false;
+
+let gameOverSoundPlayed = false;
+
+// gameOverSound.loop = false;
+
 let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
+
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
-const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
-const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-backgroundSound.loop = true;
-const context = canvas.getContext('2d')
-
-const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
-gameOverSound.loop = false;
 gameOverSound.addEventListener('ended', function () {
     this.currentTime = 0;
     this.pause();
 }, false);
-// gameOverSound.loop = false;
-
-
-
-// Füge diese Drehfunktion oben in die Datei ein
-// function rotate(tetrominos) {
-//     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
-// }
-let gameOverSoundPlayed = false;
-
-CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-    if (w < 2 * r) r = w / 2;
-    if (h < 2 * r) r = h / 2;
-    this.beginPath();
-    this.moveTo(x+r, y);
-    this.arcTo(x+w, y,   x+w, y+h, r);
-    this.arcTo(x+w, y+h, x,   y+h, r);
-    this.arcTo(x,   y+h, x,   y,   r);
-    this.arcTo(x,   y,   x+w, y,   r);
-    this.closePath();
-    return this;
-}
-
-// Füge diese Drehfunktion oben in die Datei ein
-function rotate(tetrominos) {
-    // Erstellen Sie ein leeres Array, um das neue rotierte Array zu speichern
-    let rotatedTetrominos = [];
-
-    // Durchlaufen Sie jede Spalte im ursprünglichen Array
-    for (let i = 0; i < tetrominos[0].length; i++) {
-        // Erstellen Sie ein leeres Array, um die neue Zeile zu speichern
-        let newRow = [];
-
-        // Durchlaufen Sie jede Zeile im ursprünglichen Array
-        for (let row = 0; row < tetrominos.length; row++) {
-            // Fügen Sie das Element an der aktuellen Position zur neuen Zeile hinzu
-            newRow.push(tetrominos[row][i]);
-        }
-
-        // Fügen Sie die neue Zeile zum rotierten Array hinzu
-        rotatedTetrominos.push(newRow);
-    }
-
-    // Kehren Sie die Reihenfolge der Zeilen um, um eine 90-Grad-Drehung zu erreichen
-    rotatedTetrominos = rotatedTetrominos.reverse();
-
-    // Geben Sie das rotierte Array zurück
-    return rotatedTetrominos;
-}
 
 addEventListener('keydown', ({key}) => {
     switch (key) {
@@ -173,6 +134,8 @@ function initGame()
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
+        offset=0;
+
         score = 0;
         // Optionally, you can also reset the score here, if you have a scoring system
 
@@ -207,15 +170,23 @@ function game()
 
     debug()
 
+    let params = new URLSearchParams(window.location.search);
+    let username = params.get('username');
+
+
+    console.log(username)
+
     for(let i = 0; i < blocksX; i++) {
         if (mazeState[1][i].filled === 1) {
             document.getElementById("gameOver").innerHTML = "Game Over";
+            document.getElementById("username").innerHTML = "";
             gameOver = true;
             backgroundSound.pause();
             backgroundSound.currentTime = 0;
             break;
         }else {
             document.getElementById("gameOver").innerHTML = "";
+            document.getElementById("username").innerHTML = username;
         }
     }
     if (gameOver) {
@@ -228,13 +199,14 @@ function game()
 
     if (gameStarted) {
         if (activeMinos === 0 && !gameOver) {
-            chosenTetrominos = array[Math.floor(Math.random() * array.length)];
+            chosenTetrominos = generateTetromino();
             activeMinos = chosenTetrominos.shape;
             activeColor = colors[chosenTetrominos.name];
             startBlockX = (canvas.width/2)-(blockDimension*2)
             startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
             offset = 0
         }
+        drawNextTetromino();
     }
 
     minosPosition = {
@@ -349,6 +321,77 @@ function drawBlock(x, y, block) {
         }
     }
 }
+
+function generateTetromino() { // Pasul 2
+    if (nextTetromino === null) {
+        nextTetromino = array[Math.floor(Math.random() * array.length)];
+    }
+    let currentTetromino = nextTetromino;
+    nextTetromino = array[Math.floor(Math.random() * array.length)];
+    return currentTetromino;
+}
+
+function drawNextTetromino() { // Pasul 3
+    let x = (canvas.width/2)+(canvas.width/4); // Coordonatele unde vrei să desenezi următorul tetromino
+    let y = 50;
+    for(let i = 0; i < nextTetromino.shape.length; i++) {
+        for(let j = 0; j < nextTetromino.shape[i].length; j++) {
+            if(nextTetromino.shape[i][j] === 1) {
+                context.fillStyle = colors[nextTetromino.name];
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).fill();
+                context.strokeStyle = 'white';
+                context.lineWidth = 2;
+                context.roundRect(x + j*blockDimension, y + i*blockDimension, blockDimension, blockDimension, 5).stroke();
+            }
+        }
+    }
+}
+
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x+r, y);
+    this.arcTo(x+w, y,   x+w, y+h, r);
+    this.arcTo(x+w, y+h, x,   y+h, r);
+    this.arcTo(x,   y+h, x,   y,   r);
+    this.arcTo(x,   y,   x+w, y,   r);
+    this.closePath();
+    return this;
+}
+
+// Füge diese Drehfunktion oben in die Datei ein
+// function rotate(tetrominos) {
+//     return tetrominos[0].map((val, index) => tetrominos.map(row => row[index])).reverse();
+// }
+
+// Füge diese Drehfunktion oben in die Datei ein
+function rotate(tetrominos) {
+    // Erstellen Sie ein leeres Array, um das neue rotierte Array zu speichern
+    let rotatedTetrominos = [];
+
+    // Durchlaufen Sie jede Spalte im ursprünglichen Array
+    for (let i = 0; i < tetrominos[0].length; i++) {
+        // Erstellen Sie ein leeres Array, um die neue Zeile zu speichern
+        let newRow = [];
+
+        // Durchlaufen Sie jede Zeile im ursprünglichen Array
+        for (let row = 0; row < tetrominos.length; row++) {
+            // Fügen Sie das Element an der aktuellen Position zur neuen Zeile hinzu
+            newRow.push(tetrominos[row][i]);
+        }
+
+        // Fügen Sie die neue Zeile zum rotierten Array hinzu
+        rotatedTetrominos.push(newRow);
+    }
+
+    // Kehren Sie die Reihenfolge der Zeilen um, um eine 90-Grad-Drehung zu erreichen
+    rotatedTetrominos = rotatedTetrominos.reverse();
+
+    // Geben Sie das rotierte Array zurück
+    return rotatedTetrominos;
+}
+
 function debug() {
     let currentTime = Date.now();
     if (currentTime - lastTime >= 1000) { // wenn eine Sekunde vergangen ist

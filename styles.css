@@ -1,4 +1,5 @@
 body {
+    height: 100vh;
     margin: auto;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     overflow: hidden;
@@ -101,23 +102,34 @@ body {
     font-family: 'VT323', monospace;
 }
 
+.name {
+    position: absolute;
+    top: 45%;
+    right: 100px;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    color: #fff;
+    text-align: center;
+    font-family: 'VT323', monospace;
+}
+
 .button-28 {
-   position: absolute;
-   left: 100px;
-   top: 45%;
-   background-color: transparent;
-   border: 2px solid #1A1A1A;
-   border-radius: 15px;
-   color: white;
-   cursor: pointer;
-   font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-   font-size: 16px;
-   font-weight: 600;
-   padding: 16px 24px;
-   text-align: center;
-   text-decoration: none;
-   transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-   width: 20%;
+    position: absolute;
+    left: 100px;
+    top: 45%;
+    background-color: transparent;
+    border: 2px solid #1A1A1A;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    width: 20%;
 }
 
 .button-28:disabled {
@@ -134,4 +146,16 @@ body {
 .button-28:active {
     box-shadow: none;
     transform: translateY(0);
+}
+
+.center-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px !important;
+}
+.btn .btn-primary .mb-3 {
+    display: flex;
+    justify-content: flex-end;
 }
