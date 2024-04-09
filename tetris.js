@@ -40,23 +40,22 @@ let mazeState = []
 let I = { name: 'I', shape: [[1, 1, 1, 1],] };
 
 let J = { name: 'J', shape: [[1, 0, 0],
-        [1, 1, 1],] };
+                                                   [1, 1, 1],] };
 
 let L = { name: 'L', shape: [[0, 0, 1],
-        [1, 1, 1],] };
+                                                   [1, 1, 1],] };
 
 let O = { name: 'O', shape: [[1, 1],
-        [1, 1],] };
+                                                   [1, 1],] };
 
 let S = { name: 'S', shape: [[0, 1, 1],
-        [1, 1, 0],] };
+                                                   [1, 1, 0],] };
 
 let T = { name: 'T', shape: [[0, 1, 0],
-        [1, 1, 1]] };
+                                                   [1, 1, 1]] };
 
 let Z = { name: 'Z', shape: [[1, 1, 0],
-        [0, 1, 1]] };
-
+                                                   [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
 let clear = false
@@ -73,6 +72,7 @@ let gameOverSoundPlayed = false;
 
 // gameOverSound.loop = false;
 
+let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
 
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
@@ -136,11 +136,13 @@ function initGame()
         gameOverSoundPlayed = false;
         offset=0;
 
+        score = 0;
         // Optionally, you can also reset the score here, if you have a scoring system
 
         // Start the game
         // backgroundSound.play();
     });
+
 }
 
 // game loop
@@ -150,8 +152,16 @@ function game()
 // audio.addEventListener("canplaythrough",() => audio.play())
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
-    window.requestAnimationFrame(game)
 
+    window.requestAnimationFrame(game)
+    document.getElementById("score").innerHTML = "Score: " + score;
+    highscore = JSON.parse(localStorage.getItem("highscore"))
+    if(highscore === null) {
+        highscore = "No highscore yet!";
+    } else {
+        highscore = JSON.parse(highscore);
+    }
+    document.getElementById("highscore").innerHTML = name + "'s Highscore: " + highscore;
     context.reset()
 
     hintergrund()
@@ -180,6 +190,7 @@ function game()
         }
     }
     if (gameOver) {
+        localStorage.setItem("highscore", JSON.stringify(score));
         if (!gameOverSoundPlayed) {
             // gameOverSound.play();
             gameOverSoundPlayed = true;
@@ -238,6 +249,7 @@ function game()
             let numberOfRowsToAdd = originalRows - incompleteRows.length;
             if (numberOfRowsToAdd > 0) {
                 clearSound.play();
+                score += numberOfRowsToAdd
                 for (let i = 0; i < numberOfRowsToAdd; i++) {
                     incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
                 }

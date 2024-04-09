@@ -69,6 +69,27 @@ body {
     }
 }
 
+.highscore {
+    position: absolute;
+    top: 80%;
+    right: 100px;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    color: #fff;
+    text-align: center;
+    font-family: 'VT323', monospace;
+}
+
+.score {
+    position: absolute;
+    top: 60%;
+    right: 100px;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    color: #fff;
+    text-align: center;
+    font-family: 'VT323', monospace;
+}
 
 .gameOver {
     position: absolute;
