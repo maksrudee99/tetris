@@ -152,7 +152,8 @@ function game()
 // audio.addEventListener("canplaythrough",() => audio.play())
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
-
+    let params = new URLSearchParams(window.location.search);
+    let username = params.get('username');
     window.requestAnimationFrame(game)
     document.getElementById("score").innerHTML = "Score: " + score;
     highscore = JSON.parse(localStorage.getItem("highscore"))
@@ -161,7 +162,7 @@ function game()
     } else {
         highscore = JSON.parse(highscore);
     }
-    document.getElementById("highscore").innerHTML = name + "'s Highscore: " + highscore;
+    document.getElementById("highscore").innerHTML = username + "'s Highscore: " + highscore;
     context.reset()
 
     hintergrund()
@@ -170,8 +171,7 @@ function game()
 
     debug()
 
-    let params = new URLSearchParams(window.location.search);
-    let username = params.get('username');
+
 
 
     console.log(username)
@@ -190,7 +190,9 @@ function game()
         }
     }
     if (gameOver) {
-        localStorage.setItem("highscore", JSON.stringify(score));
+        if (score>highscore){
+            localStorage.setItem("highscore", JSON.stringify(score));
+        }
         if (!gameOverSoundPlayed) {
             // gameOverSound.play();
             gameOverSoundPlayed = true;
