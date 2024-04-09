@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas')
 
 document.body.style.backgroundColor = 'black'
-
+// const fs = require('fs');
 let lastTime = Date.now();
 let fps = 0;
 
@@ -10,7 +10,6 @@ canvas.height = window.innerHeight
 
 let offset = 0
 let frameCount = 0
-
 const blocksX = 10
 const blocksY = 20
 const blockDimension = 30
@@ -57,7 +56,7 @@ const array = [I, J, L, O, S, T, Z];
 let gameStarted = false;
 
 let gameOver = false;
-
+let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
@@ -174,12 +173,13 @@ function initGame()
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
-
+        score = 0;
         // Optionally, you can also reset the score here, if you have a scoring system
 
         // Start the game
         // backgroundSound.play();
     });
+
 }
 
 // game loop
@@ -189,8 +189,16 @@ function game()
 // audio.addEventListener("canplaythrough",() => audio.play())
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
-    window.requestAnimationFrame(game)
 
+    window.requestAnimationFrame(game)
+    document.getElementById("score").innerHTML = "Score: " + score;
+    highscore = JSON.parse(localStorage.getItem("highscore"))
+    if(highscore === null) {
+        highscore = "No highscore yet!";
+    } else {
+        highscore = JSON.parse(highscore);
+    }
+    document.getElementById("highscore").innerHTML = name + "'s Highscore: " + highscore;
     context.reset()
 
     hintergrund()
@@ -211,6 +219,7 @@ function game()
         }
     }
     if (gameOver) {
+        localStorage.setItem("highscore", JSON.stringify(score));
         if (!gameOverSoundPlayed) {
             // gameOverSound.play();
             gameOverSoundPlayed = true;
@@ -268,6 +277,7 @@ function game()
             let numberOfRowsToAdd = originalRows - incompleteRows.length;
             if (numberOfRowsToAdd > 0) {
                 clearSound.play();
+                score += numberOfRowsToAdd
                 for (let i = 0; i < numberOfRowsToAdd; i++) {
                     incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
                 }
