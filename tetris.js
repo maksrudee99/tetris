@@ -57,7 +57,7 @@ let T = { name: 'T', shape: [[0, 1, 0],
 let Z = { name: 'Z', shape: [[1, 1, 0],
                                                    [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
-
+let highscore;
 let clear = false
 
 let gameStarted = false;
@@ -120,49 +120,36 @@ addEventListener('keydown', ({key}) => {
 function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
-
     console.log(mazeState)
-    // audio.play();
     game()
-    // clearSound.play()
     let playButton = document.getElementById('startButton');
     playButton.addEventListener('click', function() {
         // Reset mazeState
         mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
-
         // Reset game variables
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
         offset=0;
-
         score = 0;
-        // Optionally, you can also reset the score here, if you have a scoring system
-
-        // Start the game
-        // backgroundSound.play();
+        backgroundSound.play();
     });
 
 }
 
-// game loop
 function game()
 {
-// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-// audio.addEventListener("canplaythrough",() => audio.play())
-//     document.getElementById('tetris-soundtrack').play();
-// clearSound.play();
     let params = new URLSearchParams(window.location.search);
     let username = params.get('username');
     window.requestAnimationFrame(game)
     document.getElementById("score").innerHTML = "Score: " + score;
     highscore = JSON.parse(localStorage.getItem("highscore"))
     if(highscore === null) {
-        highscore = "No highscore yet!";
+        highscore = 0;
     } else {
         highscore = JSON.parse(highscore);
     }
-    document.getElementById("highscore").innerHTML = username + "'s Highscore: " + highscore;
+    document.getElementById("highscore").innerHTML = username + "'s highscore: " + highscore;
     context.reset()
 
     hintergrund()
@@ -170,9 +157,6 @@ function game()
     frameCount++
 
     debug()
-
-
-
 
     console.log(username)
 
@@ -194,7 +178,7 @@ function game()
             localStorage.setItem("highscore", JSON.stringify(score));
         }
         if (!gameOverSoundPlayed) {
-            // gameOverSound.play();
+             gameOverSound.play();
             gameOverSoundPlayed = true;
         }
     }
@@ -238,7 +222,6 @@ function game()
 
         console.log(minosPosition)
         console.log(activeMinos)
-        // console.log(array)
         activeMinos = 0
 
         function isRowFull(row) {
@@ -271,7 +254,7 @@ function hintergrund() {
     let mazeStartX = (canvas.width/2)-(blocksX*blockDimension)/2
     let mazeStartY = (canvas.height/2) - (blocksY*blockDimension)/2
 
-    context.fillRect(mazeStartX, mazeStartY, blocksX*blockDimension, blocksY*blockDimension)
+    // context.fillRect(mazeStartX, mazeStartY, blocksX*blockDimension, blocksY*blockDimension)
 
     // Zeichne 20 horizontale Linien
     for(let i = 0; i <= 20; i++) {

@@ -71,8 +71,8 @@ body {
 
 .highscore {
     position: absolute;
-    top: 80%;
-    right: 100px;
+    top: 5%;
+    right: 450px;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
@@ -83,7 +83,7 @@ body {
 .score {
     position: absolute;
     top: 60%;
-    right: 100px;
+    right: 110px;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
@@ -94,18 +94,18 @@ body {
 .gameOver {
     position: absolute;
     top: 45%;
-    right: 100px;
+    right: -9%;
     transform: translate(-50%, -50%);
-    font-size: 3em;
+    font-size: 7em;
     color: #fff;
     text-align: center;
-    font-family: 'VT323', monospace;
+    font-family: Impact, fantasy;
 }
 
 .name {
     position: absolute;
     top: 45%;
-    right: 100px;
+    right: 10%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
