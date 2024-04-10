@@ -3,15 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="margin: 0; padding: 0">
 <canvas id="canvas" ></canvas>
 <h2 class="gameOver" id="gameOver" ></h2>
-<h2 class="score" id="score" ></h2>
-<h2 class="highscore" id="highscore" ></h2>
-<button id="startButton" class="button-28" role="button">Start Game</button>
-<h2 class="name" id="username"></h2>
+
+<div class="background-nextTetromino"><p class="next">Next</p></div>
+
+<table class="table">
+    <tbody>
+    <tr>
+        <th scope="row">Username</th>
+        <td class="name" id="username"></td>
+    </tr>
+    <tr>
+        <th scope="row">Level</th>
+        <td class="level" id="level" >1</td>
+    </tr>
+    <tr>
+        <th scope="row">Score</th>
+        <td  class="score" id="score" ></td>
+    </tr>
+    <tr>
+        <th scope="row">Highscore</th>
+        <td class="highscore" id="highscore" ></td>
+    </tr>
+    </tbody>
+</table>
+
+<button id="startButton" class="button-28" role="button">Start game</button>
+
+<button class="pause" id="pauseButton">Pause</button>
 <div>
     <div class="wave"></div>
     <div class="wave"></div>
