@@ -1,3 +1,14 @@
+// import { NumberFlip } from "number-flip-animation";
+// import 'number-flip-animation/dist/styles.css'
+//
+// const numberFlip = new NumberFlip({
+//     rootElement: document.getElementById('score'),
+// });
+//
+// numberFlip.setNumberTo({
+//     newNumber: score
+// });
+
 const canvas = document.getElementById('canvas')
 
 document.body.style.backgroundColor = 'black'
