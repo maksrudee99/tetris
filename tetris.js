@@ -82,6 +82,15 @@ gameOverSound.addEventListener('ended', function () {
     this.pause();
 }, false);
 
+
+let gameOverOverlay = document.getElementById('game-over-overlay');
+let gameOverText = document.getElementById('game-over-text');
+
+
+
+
+
+
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
@@ -162,14 +171,16 @@ function game()
 
     for(let i = 0; i < blocksX; i++) {
         if (mazeState[1][i].filled === 1) {
-            document.getElementById("gameOver").innerHTML = "Game Over";
+
+            gameOverOverlay.style.display = 'flex';
             document.getElementById("username").innerHTML = "";
             gameOver = true;
             backgroundSound.pause();
             backgroundSound.currentTime = 0;
             break;
         }else {
-            document.getElementById("gameOver").innerHTML = "";
+
+            gameOverOverlay.style.display = 'none';
             document.getElementById("username").innerHTML = username;
         }
     }
