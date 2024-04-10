@@ -22,7 +22,7 @@ const colors = {
 const audio = document.getElementById("tetris-soundtrack");
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
 const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
+const gameOverSound = new Audio("/sounds/smb_mariodie.wav")
 
 let lastTime = Date.now();
 let fps = 0;
@@ -158,7 +158,7 @@ function game()
     } else {
         highscore = JSON.parse(highscore);
     }
-    document.getElementById("highscore").innerHTML = username + "'s highscore: " + highscore;
+    document.getElementById("highscore").innerHTML = "Highscore von " + username + ": " + highscore;
     context.reset()
 
     hintergrund()
@@ -171,7 +171,11 @@ function game()
 
     for(let i = 0; i < blocksX; i++) {
         if (mazeState[1][i].filled === 1) {
-
+            document.getElementById("broken-screen").style.display = "block"
+            document.getElementById("restartButton").addEventListener("click", function() {
+                window.location.href = 'name.html';
+            });
+            // document.getElementById("loose").style.display = "block";
             gameOverOverlay.style.display = 'flex';
             document.getElementById("username").innerHTML = "";
             gameOver = true;
