@@ -103,6 +103,7 @@ body {
     color: white;
     font-family: 'Pixelify Sans', monospace;
     font-size: 30px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .table {
@@ -125,6 +126,7 @@ body {
     color: white;
     font-family: 'Pixelify Sans', monospace;
     font-size: 30px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .button-28 {
@@ -143,6 +145,7 @@ body {
     text-decoration: none;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
     width: 20%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .button-28:disabled {
@@ -154,6 +157,7 @@ body {
     background-color: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
     transform: translateY(-2px);
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .button-28:active {
@@ -177,6 +181,7 @@ body {
     text-decoration: none;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
     width: 20%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
 .pause:disabled {
@@ -188,11 +193,173 @@ body {
     background-color: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
     transform: translateY(-2px);
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .pause:active {
     box-shadow: none;
     transform: translateY(0);
+}
+
+.changeName {
+    position: absolute;
+    left: 150px;
+    top: 65%;
+    background-color: transparent;
+    border: 5px solid #ffffff;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Pixelify Sans', monospace;    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    width: 20%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.changeName:disabled {
+    pointer-events: none;
+}
+
+.changeName:hover {
+    color: #1A1A1A;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.changeName:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.sound {
+    position: absolute;
+    left: 150px;
+    top: 75%;
+    background-color: transparent;
+    border: 5px solid #ffffff;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Pixelify Sans', monospace;    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    width: 20%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.sound:disabled {
+    pointer-events: none;
+}
+
+.sound:hover {
+    color: #1A1A1A;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.sound:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.title {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11em;
+    color: #fff;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-align: center;
+    font-family: 'Pixelify Sans', monospace;
+    font-weight: bold;
+}
+
+.red {
+    color: #FF7F00;
+}
+
+.green {
+    color: #7FFF00;
+}
+
+.blue {
+    color: #A020F0;
+}
+
+.yellow {
+    color: cyan;
+}
+
+.purple {
+    color: red;
+}
+
+.orange {
+    color: #FFD700;
+}
+
+.subtitle {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5em;
+    color: #fff;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-align: center;
+    font-family: 'Pixelify Sans', monospace;
+
+}
+
+.save {
+    position: absolute;
+    top: 80%;
+    background-color: transparent;
+    border: 5px solid #ffffff;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Pixelify Sans', monospace;    font-size: 16px;
+    font-weight: 600;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    width: 100%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.save:disabled {
+    pointer-events: none;
+}
+
+.save:hover {
+    color: #1A1A1A;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.save:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.input-group-text {
+    font-family: 'Pixelify Sans', monospace;    font-size: 16px;
 }
 
 .center-form {
@@ -202,7 +369,4 @@ body {
     transform: translate(-50%, -50%);
     width: 300px !important;
 }
-.btn .btn-primary .mb-3 {
-    display: flex;
-    justify-content: flex-end;
-}
+

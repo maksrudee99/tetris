@@ -72,9 +72,20 @@ let gameOverSoundPlayed = false;
 
 let gamePaused = false;
 
+let soundOff = false;
+
 // gameOverSound.loop = false;
 
+let timeDecrease = 0;
+
+let level = 1;
+
+let counter = 0;
+
 let score = 0;
+
+let interval
+
 let startBlockX = (canvas.width/2)-(blockDimension*2)
 
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
@@ -87,15 +98,15 @@ gameOverSound.addEventListener('ended', function () {
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
-            if ((startBlockX>(canvas.width/2)-(blocksX*blockDimension)/2) && offset<blocksY*blockDimension-31){
-                startBlockX-=blockDimension
+            if (checkMoveLeft() && offset < blocksY * blockDimension - 31) {
+                startBlockX -= blockDimension;
             }
-            break
+            break;
         case 'ArrowRight':
-            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && (offset<blocksY*blockDimension-31)){
-                startBlockX+=blockDimension
+            if (checkMoveRight() && offset < blocksY * blockDimension - 31) {
+                startBlockX += blockDimension;
             }
-            break
+            break;
         case 'ArrowDown':
             if(offset < blocksY * blockDimension - activeMinos.length*blockDimension) {
                 offset += 30
@@ -118,6 +129,11 @@ addEventListener('keydown', ({key}) => {
     }
 });
 
+let changeNameButton = document.getElementById('changeNameButton');
+changeNameButton.addEventListener('click', function() {
+    window.location.href = 'name.html';
+});
+
 // Prepare some start variables
 function initGame()
 {
@@ -137,12 +153,29 @@ function initGame()
         gameStarted = true;
         gameOverSoundPlayed = false;
         offset=0;
-
         score = 0;
+
+        clearInterval(interval);
+        timeDecrease = 0;
+        level = 1;
+        counter = 0;
+
+        interval = setInterval(function() {
+            if (!gamePaused) {
+                if (counter < 9) {
+                    timeDecrease += 100;
+                    level++;
+                    counter++;
+                }
+            }
+        }, 5000);
+
         // Optionally, you can also reset the score here, if you have a scoring system
 
         // Start the game
-        backgroundSound.play();
+        if (!soundOff) {
+            backgroundSound.play();
+        }
     });
     let pauseButton = document.getElementById('pauseButton');
     pauseButton.addEventListener('click', function() {
@@ -158,8 +191,22 @@ function initGame()
         }
     });
 
-}
+    let soundButton = document.getElementById('soundButton');
+    soundButton.addEventListener('click', function() {
 
+        soundOff = !soundOff;
+
+        if (backgroundSound.paused) {
+            backgroundSound.play();
+            this.textContent = 'Sound On';
+        } else {
+            backgroundSound.pause();
+            this.textContent = 'Sound Off';
+        }
+    });
+
+
+}
 // game loop
 function game()
 {
@@ -167,6 +214,7 @@ function game()
 // audio.addEventListener("canplaythrough",() => audio.play())
 //     document.getElementById('tetris-soundtrack').play();
 // clearSound.play();
+
     if (!gamePaused) {
         document.getElementById("score").innerHTML = score;
         let highscore = JSON.parse(localStorage.getItem("highscore"))
@@ -186,7 +234,7 @@ function game()
 
         let params = new URLSearchParams(window.location.search);
         let username = params.get('username');
-
+        document.getElementById("level").innerHTML = level;
 
         console.log(username)
 
@@ -206,7 +254,9 @@ function game()
         if (gameOver) {
             localStorage.setItem("highscore", JSON.stringify(score));
             if (!gameOverSoundPlayed) {
-                gameOverSound.play();
+                if (!soundOff) {
+                    gameOverSound.play();
+                }
                 gameOverSoundPlayed = true;
             }
         }
@@ -247,6 +297,19 @@ function game()
                     }
                 }
             }
+            setTimeout(function() {
+                // Verificați dacă tetromino-ul poate fi mutat în stânga
+                let canMoveLeft = checkMoveLeft();
+                // Verificați dacă tetromino-ul poate fi mutat în dreapta
+                let canMoveRight = checkMoveRight();
+
+                // Mutați tetromino-ul în direcția în care poate fi mutat
+                if (canMoveLeft) {
+                    startBlockX -= blockDimension;
+                } else if (canMoveRight) {
+                    startBlockX += blockDimension;
+                }
+            }, 1000);
 
             console.log(minosPosition)
             console.log(activeMinos)
@@ -262,7 +325,9 @@ function game()
                 let incompleteRows = mazeState.filter(row => !isRowFull(row));
                 let numberOfRowsToAdd = originalRows - incompleteRows.length;
                 if (numberOfRowsToAdd > 0) {
-                    clearSound.play();
+                    if (!soundOff){
+                        clearSound.play();
+                    }
                     score += numberOfRowsToAdd
                     for (let i = 0; i < numberOfRowsToAdd; i++) {
                         incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
@@ -272,8 +337,14 @@ function game()
             }
             removeFullRows();
         }else {
+            let currentTime = Date.now();
+            if (currentTime - lastTime >= (1000 - timeDecrease)) {
+                fps = frameCount;
+                frameCount = 0;
+                lastTime = currentTime;
+                offset += 30;
+            }
             drawBlock(startBlockX, startBlockY + offset, activeMinos)
-
         }
     }
     window.requestAnimationFrame(game)
@@ -340,6 +411,29 @@ function drawBlock(x, y, block) {
             }
         }
     }
+}
+
+
+function checkMoveLeft() {
+    for(let i = 0; i < activeMinos.length; i++) {
+        for (let j = 0; j < activeMinos[i].length; j++) {
+            if (activeMinos[i][j] === 1 && (minosPosition.x + j - 1 < 0 || mazeState[minosPosition.y + i][minosPosition.x + j - 1].filled === 1)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function checkMoveRight() {
+    for(let i = 0; i < activeMinos.length; i++) {
+        for (let j = 0; j < activeMinos[i].length; j++) {
+            if (activeMinos[i][j] === 1 && (minosPosition.x + j + 1 >= blocksX || mazeState[minosPosition.y + i][minosPosition.x + j + 1].filled === 1)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 function generateTetromino() { // Pasul 2
