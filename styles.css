@@ -68,6 +68,14 @@ body {
         transform: translateX(1);
     }
 }
+
+.bebas-neue-regular {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
 #gameover-mit-feuer {
 }
 
@@ -77,6 +85,14 @@ body {
     left: 30%; /* adjust this value to position alien */
     transform: translate(-50%, -50%);
     z-index: 2; /* Alien appears over the fire */
+}
+#logo-tetris {
+    position: absolute;
+    top: 15%;
+    right: 85%; /* adjust this value to position pepe */
+    transform: translate(50%, -50%);
+    z-index: 2; /* Pepe appears over the fire */
+    width: 10%;
 }
 
 #pepe-dance {
@@ -106,6 +122,73 @@ body {
     z-index: 2; /* Text vor dem Feuer */
 }
 
+.broken-screen {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.new-highscore {
+    display: none;
+    /*color: white;*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    font-family: bebas Neue, sans-serif;
+    font-size: 5em;
+    color: black;
+}
+
+.firework {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+}
+
+.from-us {
+    position: absolute;
+    right: 85%; /* adjust this value to position pepe */
+    transform: translate(50%, -50%);
+    z-index: 0; /* Pepe appears over the fire */
+    color: white;
+    top: 25%;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1em;
+}
+
+.orbitron {
+               font-family: "Orbitron", sans-serif;
+               font-optical-sizing: auto;
+               font-style: normal;
+           }
+.tetris {
+    color: white;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Text vor dem Feuer */
+    /*font-family: "Pixelify Sans", sans-serif;*/
+    font-family: "Orbitron", sans-serif;
+    font-size: 10em;
+}
+
+#konfetti {
+    display: none;
+    position: absolute;
+    top: 29%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 48%;
+    height: 14%;
+}
+
 .game-over-overlay {
     position: relative; /* Positionierungsbezugspunkt für absolut positionierte Kinder */
     top: 0;
@@ -124,23 +207,25 @@ body {
 .highscore {
     position: absolute;
     top: 5%;
-    right: 450px;
+    left: 50%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
     text-align: center;
-    font-family: 'VT323', monospace;
+    font-family: "Orbitron", sans-serif;
 }
 
 .score {
     position: absolute;
     top: 60%;
-    right: 110px;
+    right: 1%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
-    text-align: center;
-    font-family: 'VT323', monospace;
+    /*text-align: center;*/
+    text-align: center; /* Text should align to right */
+    width: 20%; /* Specify the width */
+    font-family: "Orbitron", sans-serif;
 }
 
 .gameOver {
@@ -157,12 +242,14 @@ body {
 .name {
     position: absolute;
     top: 45%;
-    right: 10%;
+    right: 1%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
-    text-align: center;
-    font-family: 'VT323', monospace;
+    text-align: center; /* Text should align to right */
+    width: 20%; /* Specify the width */
+    /*text-align: center;*/
+    font-family: "Orbitron", sans-serif;
 }
 
 .button-28 {
@@ -174,7 +261,8 @@ body {
     border-radius: 15px;
     color: white;
     cursor: pointer;
-    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: "Orbitron", sans-serif;
+    /*font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";*/
     font-size: 16px;
     font-weight: 600;
     padding: 16px 24px;
