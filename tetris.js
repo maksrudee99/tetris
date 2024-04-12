@@ -40,22 +40,22 @@ let mazeState = []
 let I = { name: 'I', shape: [[1, 1, 1, 1],] };
 
 let J = { name: 'J', shape: [[1, 0, 0],
-                                                   [1, 1, 1],] };
+        [1, 1, 1],] };
 
 let L = { name: 'L', shape: [[0, 0, 1],
-                                                   [1, 1, 1],] };
+        [1, 1, 1],] };
 
 let O = { name: 'O', shape: [[1, 1],
-                                                   [1, 1],] };
+        [1, 1],] };
 
 let S = { name: 'S', shape: [[0, 1, 1],
-                                                   [1, 1, 0],] };
+        [1, 1, 0],] };
 
 let T = { name: 'T', shape: [[0, 1, 0],
-                                                   [1, 1, 1]] };
+        [1, 1, 1]] };
 
 let Z = { name: 'Z', shape: [[1, 1, 0],
-                                                   [0, 1, 1]] };
+        [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
 
 let clear = false
@@ -98,15 +98,33 @@ gameOverSound.addEventListener('ended', function () {
 addEventListener('keydown', ({key}) => {
     switch (key) {
         case 'ArrowLeft':
-            if (checkMoveLeft() && offset < blocksY * blockDimension - 31) {
-                startBlockX -= blockDimension;
+            let canMoveLeft = true;
+            for(let i = 0; i < activeMinos.length; i++) {
+                for (let j = 0; j < activeMinos[i].length; j++) {
+                    if (activeMinos[i][j] === 1 && mazeState[minosPosition.y + i][minosPosition.x + j - 1] && mazeState[minosPosition.y + i][minosPosition.x + j - 1].filled === 1) {
+                        canMoveLeft = false;
+                        break;
+                    }
+                }
             }
-            break;
+            if ((startBlockX>(canvas.width/2)-(blocksX*blockDimension)/2) && offset<blocksY*blockDimension-31 && canMoveLeft){
+                startBlockX-=blockDimension
+            }
+            break
         case 'ArrowRight':
-            if (checkMoveRight() && offset < blocksY * blockDimension - 31) {
-                startBlockX += blockDimension;
+            let canMoveRight = true;
+            for(let i = 0; i < activeMinos.length; i++) {
+                for (let j = 0; j < activeMinos[i].length; j++) {
+                    if (activeMinos[i][j] === 1 && mazeState[minosPosition.y + i][minosPosition.x + j + 1] && mazeState[minosPosition.y + i][minosPosition.x + j + 1].filled === 1) {
+                        canMoveRight = false;
+                        break;
+                    }
+                }
             }
-            break;
+            if ((startBlockX<(canvas.width/2)+((blocksX*blockDimension)/2)-(activeMinos[0].length*blockDimension)) && (offset<blocksY*blockDimension-31) && canMoveRight){
+                startBlockX+=blockDimension
+            }
+            break
         case 'ArrowDown':
             if(offset < blocksY * blockDimension - activeMinos.length*blockDimension) {
                 offset += 30
@@ -297,19 +315,6 @@ function game()
                     }
                 }
             }
-            setTimeout(function() {
-                // Verificați dacă tetromino-ul poate fi mutat în stânga
-                let canMoveLeft = checkMoveLeft();
-                // Verificați dacă tetromino-ul poate fi mutat în dreapta
-                let canMoveRight = checkMoveRight();
-
-                // Mutați tetromino-ul în direcția în care poate fi mutat
-                if (canMoveLeft) {
-                    startBlockX -= blockDimension;
-                } else if (canMoveRight) {
-                    startBlockX += blockDimension;
-                }
-            }, 1000);
 
             console.log(minosPosition)
             console.log(activeMinos)
@@ -411,29 +416,6 @@ function drawBlock(x, y, block) {
             }
         }
     }
-}
-
-
-function checkMoveLeft() {
-    for(let i = 0; i < activeMinos.length; i++) {
-        for (let j = 0; j < activeMinos[i].length; j++) {
-            if (activeMinos[i][j] === 1 && (minosPosition.x + j - 1 < 0 || mazeState[minosPosition.y + i][minosPosition.x + j - 1].filled === 1)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-function checkMoveRight() {
-    for(let i = 0; i < activeMinos.length; i++) {
-        for (let j = 0; j < activeMinos[i].length; j++) {
-            if (activeMinos[i][j] === 1 && (minosPosition.x + j + 1 >= blocksX || mazeState[minosPosition.y + i][minosPosition.x + j + 1].filled === 1)) {
-                return false;
-            }
-        }
-    }
-    return true;
 }
 
 function generateTetromino() { // Pasul 2
