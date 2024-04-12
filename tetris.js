@@ -87,7 +87,6 @@ let gameOverSoundPlayed = false;
 
 let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
-
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 gameOverSound.addEventListener('ended', function () {
@@ -95,14 +94,9 @@ gameOverSound.addEventListener('ended', function () {
     this.pause();
 }, false);
 
-
 let gameOverOverlay = document.getElementById('game-over-overlay');
+let highscoreOverlay = document.getElementById('highscore-overlay');
 let gameOverText = document.getElementById('game-over-text');
-
-
-
-
-
 
 addEventListener('keydown', ({key}) => {
     switch (key) {
@@ -134,7 +128,6 @@ addEventListener('keydown', ({key}) => {
                 activeMinos = rotate(activeMinos);
             }
             break
-
     }
 });
 
@@ -153,17 +146,20 @@ function initGame()
         gameStarted = true;
         gameOverSoundPlayed = false;
         offset=0;
-        score = 35;
-        backgroundSound.play();
+        score = 106;
+// ausgeschalltet
+        // backgroundSound.play();
     });
-
 }
 
 function game() {
     let params = new URLSearchParams(window.location.search);
     let username = params.get('username');
 
-    window.requestAnimationFrame(game)
+    if (!gameOver){
+        window.requestAnimationFrame(game)
+    }
+
     document.getElementById("score").innerHTML = "Score: " + score;
 
     let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
@@ -185,16 +181,6 @@ function game() {
 
     for (let i = 0; i < blocksX; i++) {
         if (mazeState[1][i].filled === 1) {
-            // document.getElementById("broken-screen").style.display = "block"
-            // document.getElementById("restartButton").addEventListener("click", function() {
-            //     window.location.href = 'name.html';
-            // });
-            // document.getElementById('logo-tetris').style.display = 'none';
-            //
-            // // Prüfen und speichern des Highscores
-            // // document.getElementById("loose").style.display = "block";
-            // gameOverOverlay.style.display = 'flex';
-            // document.getElementById("username").innerHTML = "";
             gameOver = true;
             backgroundSound.pause();
             backgroundSound.currentTime = 0;
@@ -203,85 +189,11 @@ function game() {
             document.getElementById("username").innerHTML = username;
         }
     }
-    // if (gameOver) {
-    //     if (score>highscore){
-    //         highscore = { username: username, highscore: score };
-    //         localStorage.setItem("highscore", JSON.stringify(score));
-    //     }
-    //     if (!gameOverSoundPlayed) {
-    //          gameOverSound.play();
-    //         gameOverSoundPlayed = true;
-    //     }
-    // }
-// if (gameOver){
-//     let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
-//     if  (gameOver && score <= highscoreData.highscore) {
-//         document.getElementById("broken-screen").style.display = "block"
-//         document.getElementById("restartButton").addEventListener("click", function () {
-//             window.location.href = 'name.html';
-//         });
-//         document.getElementById('logo-tetris').style.display = 'none';
-//         gameOverOverlay.style.display = 'flex';
-//         document.getElementById("username").innerHTML = "";
-//         if (!gameOverSoundPlayed) {
-//             gameOverSound.play();
-//             gameOverSoundPlayed = true;
-//         }
-//
-//     } else if  (gameOver && highscoreData === null || gameOver && score > highscoreData.highscore) {
-//         // gameOverSound.play();
-//         // gameOverSoundPlayed = true;
-//         // if(highscoreData === null || score > highscoreData.highscore) {
-//         highscoreData = {username: username, highscore: score};
-//         localStorage.setItem("highscore_data", JSON.stringify(highscoreData));
-//         backgroundSound.pause()
-//         backgroundSound.currentTime = 0;
-//         document.getElementById("broken-screen").style.display = "block"
-//         document.getElementById("restartButton").addEventListener("click", function () {
-//             window.location.href = 'name.html';
-//         });
-//         document.getElementById('logo-tetris').style.display = 'none';
-//         document.getElementById("new-highscore").innerHTML = "Neuen Highscore erreicht!: " + highscoreData.highscore;
-//         document.getElementById('new-highscore').style.display = "flex";
-//         document.getElementById("konfetti").style.display = "flex";
-//         if (!crowdCheerSoundPlayed) {
-//             crowdCheer.play()
-//             crowdCheerSoundPlayed = true
-//         }
-//     }
-// }
-
-
-    if (gameOver){
-        let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
-        if  (highscoreData === null || score > highscoreData.highscore) {
-            highscoreData = {username: username, highscore: score};
-            localStorage.setItem("highscore_data", JSON.stringify(highscoreData));
-            document.getElementById("broken-screen").style.display = "none";
-            backgroundSound.pause()
-            backgroundSound.currentTime = 0;
-            // document.getElementById("broken-screen").style.display = "none"
-            document.getElementById("restartButton").addEventListener("click", function () {
-                window.location.href = 'name.html';
-            });
-            document.getElementById('logo-tetris').style.display = 'none';
-            document.getElementById("new-highscore").innerHTML = "Neuen Highscore erreicht!: " + highscoreData.highscore;
-            document.getElementById('new-highscore').style.display = "flex";
-            // document.getElementById("konfetti").style.display = "flex";
-            gameOverOverlay.style.display = 'none';
-            document.getElementById("feuer-gif").style.display = "none";
-            document.getElementById("game-over-text").style.display = "none";
-            document.getElementById("game-over-alien").style.display = "none";
-            document.getElementById("pepe-dance").style.display = "none";
-            document.getElementById("firework").style.display = "flex";
-            if (!crowdCheerSoundPlayed) {
-                crowdCheer.play()
-                crowdCheerSoundPlayed = true
-            }
-            gameOverSoundPlayed = true
-
-        } else if (score <= highscoreData.highscore) {
-            document.getElementById("broken-screen").style.display = "block"
+// gameOver = false
+    if (gameOver) {
+        // let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
+        if (highscoreData !== null && score <= highscoreData.highscore) {
+            // document.getElementById("broken-screen").style.display = "block"
             document.getElementById("restartButton").addEventListener("click", function () {
                 window.location.href = 'name.html';
             });
@@ -289,25 +201,56 @@ function game() {
             gameOverOverlay.style.display = 'flex';
             document.getElementById("username").innerHTML = "";
             if (!gameOverSoundPlayed) {
-                gameOverSound.play();
+                // ausgeschaltet
+                // gameOverSound.play();
                 gameOverSoundPlayed = true;
             }
+            return
+            // gameOver = false
+        } else if (highscoreData === null || score > highscoreData.highscore) {
+            highscoreData = {username: username, highscore: score};
+            localStorage.setItem("highscore_data", JSON.stringify(highscoreData));
+            backgroundSound.pause()
+            backgroundSound.currentTime = 0;
+            // document.getElementById("broken-screen").style.display = "none"
+            gameOverOverlay.classList.remove("game-over-overlay");
+            document.getElementById("restartButton").style.background = "rgba(0, 0, 0, 0)";
+            document.getElementById("restartButton").style.color = "black";
+            // document.getElementById('restartButton').addEventListener('mouseover', function() {
+            //     ("restartButton").style.color = 'white';
+            // });
+            document.getElementById("broken-screen").style.display = "none";
+            document.getElementById('highscore-overlay').style.display = 'flex';
+            document.getElementById('logo-tetris').style.display = 'none';
+            document.getElementById("new-highscore").innerHTML = "Neuen Highscore erreicht!: " + highscoreData.highscore;
+            document.getElementById('new-highscore').style.display = "flex";
+            // document.getElementById("konfetti").style.display = "flex";
+            document.getElementById('game-over-overlay').style.display = 'none';
+            // gameOverOverlay.style.display = 'none';
+            // highscoreOverlay.classList.remove("firework");
+            document.getElementById("feuer-gif").style.display = "none";
+            document.getElementById("game-over-text").style.display = "none";
+            document.getElementById("game-over-alien").style.display = "none";
+            document.getElementById("pepe-dance").style.display = "none";
+            document.getElementById("firework").style.display = "none";
+            // document.getElementById("konfetti").style.display = "flex";
+            // document.getElementById("konfetti2").style.display = "flex";
+            document.getElementById("konfetti").style.display = "flex";
 
+            // document.getElementById("firework").style.display = "block";
+            document.getElementById("restartButton").addEventListener("click", function () {
+                window.location.href = 'name.html';
+            });
+            if (!crowdCheerSoundPlayed) {
+                // ausgeschaltet
+                // crowdCheer.play()
+                crowdCheerSoundPlayed = true
+            }
+            gameOverSoundPlayed = true
+            // gameOver = false
+            return
         }
     }
-
-            // if (gameOverSoundPlayed){
-            //     gameOverSound.pause()
-            //     gameOverSound.currentTime=0
-            // }
-            // // Prüfen und speichern des Highscores
-            // let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
-            // if(highscoreData === null || score > highscoreData.highscore) {
-            //     highscoreData = { username: username, highscore: score };
-            //     localStorage.setItem("highscore_data", JSON.stringify(highscoreData));
-            // }
-    // }
-
     if (gameStarted) {
         if (activeMinos === 0 && !gameOver) {
             chosenTetrominos = generateTetromino();
@@ -319,7 +262,6 @@ function game() {
         }
         drawNextTetromino();
     }
-
     minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
@@ -358,7 +300,8 @@ function game() {
             let incompleteRows = mazeState.filter(row => !isRowFull(row));
             let numberOfRowsToAdd = originalRows - incompleteRows.length;
             if (numberOfRowsToAdd > 0) {
-                clearSound.play();
+                // ausgeschaltet
+                // clearSound.play();
                 score += numberOfRowsToAdd
                 for (let i = 0; i < numberOfRowsToAdd; i++) {
                     incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));

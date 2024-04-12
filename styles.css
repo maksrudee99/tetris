@@ -122,32 +122,53 @@ body {
     z-index: 2; /* Text vor dem Feuer */
 }
 
-.broken-screen {
-    display: none;
+#broken-screen {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    /*transform: translate(-50%, -50%);*/
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 1;
 }
 
 .new-highscore {
-    display: none;
+    display: block;
     /*color: white;*/
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
+    transform: translate(-50%, -50%); /* Hinzugefügte Zeile */
     z-index: 2;
     font-family: bebas Neue, sans-serif;
     font-size: 5em;
     color: black;
 }
+.highscore-overlay {
+    display: none;
+    background: rgba(0, 0, 0, 0)!important;
+}
 
-.firework {
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
+#firework {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;  /* Hinzugefügte Linie */
+    height: 100%; /* Hinzugefügte Linie */
+    z-index: 1;
+}
+
+#background-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0; /* Damit liegt der Hintergrund hinter anderen Elementen */
+    background-color: white;
 }
 
 .from-us {
@@ -178,15 +199,47 @@ body {
     font-size: 10em;
 }
 
+/*so ist es nur klein über dem text*/
+/*#konfetti {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    top: 29%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    z-index: 1; !* Falls das Konfetti hinter dem Text liegen soll *!*/
+/*    width: 48%;*/
+/*    height: 14%;*/
+/*}*/
+
+/*so ist es über dem ganzen bildschirm*/
 #konfetti {
     display: none;
     position: absolute;
-    top: 29%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1; /* Falls das Konfetti hinter dem Text liegen soll */
-    width: 48%;
-    height: 14%;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
+}
+
+#konfetti2 {
+    display: none;
+    position: absolute;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
+}
+
+#konfetti4 {
+    display: none;
+    position: absolute;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
 }
 
 .game-over-overlay {
