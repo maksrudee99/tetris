@@ -89,7 +89,6 @@ let interval
 let startBlockX = (canvas.width/2)-(blockDimension*2)
 
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
-
 gameOverSound.addEventListener('ended', function () {
     this.currentTime = 0;
     this.pause();
@@ -316,10 +315,11 @@ function game()
                 }
             }
 
+
             console.log(minosPosition)
             console.log(activeMinos)
             // console.log(array)
-            activeMinos = 0
+            activeMinos = 0;
 
             function isRowFull(row) {
                 return row.every(cell => cell.filled === 1);
@@ -418,7 +418,7 @@ function drawBlock(x, y, block) {
     }
 }
 
-function generateTetromino() { // Pasul 2
+function generateTetromino() {
     if (nextTetromino === null) {
         nextTetromino = array[Math.floor(Math.random() * array.length)];
     }
@@ -427,8 +427,8 @@ function generateTetromino() { // Pasul 2
     return currentTetromino;
 }
 
-function drawNextTetromino() { // Pasul 3
-    let x = canvas.width-475; // Coordonatele unde vrei să desenezi următorul tetromino
+function drawNextTetromino() {
+    let x = canvas.width-475;
     let y = (canvas.height/2)-(canvas.height/4)+ 45;
     for(let i = 0; i < nextTetromino.shape.length; i++) {
         for(let j = 0; j < nextTetromino.shape[i].length; j++) {
