@@ -146,7 +146,7 @@ function initGame()
         gameStarted = true;
         gameOverSoundPlayed = false;
         offset=0;
-        score = 106;
+        score = 0;
 // ausgeschalltet
         // backgroundSound.play();
     });
