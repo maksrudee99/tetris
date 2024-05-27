@@ -1,3 +1,14 @@
+// import { NumberFlip } from "number-flip-animation";
+// import 'number-flip-animation/dist/styles.css'
+//
+// const numberFlip = new NumberFlip({
+//     rootElement: document.getElementById('score'),
+// });
+//
+// numberFlip.setNumberTo({
+//     newNumber: score
+// });
+
 const canvas = document.getElementById('canvas')
 
 document.body.style.backgroundColor = 'black'
@@ -22,7 +33,8 @@ const colors = {
 const audio = document.getElementById("tetris-soundtrack");
 const clearSound = new Audio("/sounds/cute-level-up-3-189853.mp3")
 const backgroundSound = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-const gameOverSound = new Audio("/sounds/mixkit-arcade-retro-game-over-213.wav")
+const gameOverSound = new Audio("/sounds/smb_mariodie.wav")
+const crowdCheer = new Audio("/sounds/crowd-cheer-ii-6263.mp3")
 
 let lastTime = Date.now();
 let fps = 0;
@@ -57,7 +69,7 @@ let T = { name: 'T', shape: [[0, 1, 0],
 let Z = { name: 'Z', shape: [[1, 1, 0],
                                                    [0, 1, 1]] };
 const array = [I, J, L, O, S, T, Z];
-
+let highscore;
 let clear = false
 
 let gameStarted = false;
@@ -67,20 +79,24 @@ let gameOver = false;
 backgroundSound.loop = true;
 
 gameOverSound.loop = false;
-
+let crowdCheerSoundPlayed = false
+crowdCheer.loop = true;
 let gameOverSoundPlayed = false;
 
 // gameOverSound.loop = false;
 
 let score = 0;
 let startBlockX = (canvas.width/2)-(blockDimension*2)
-
 let startBlockY = (canvas.height/2)-((blocksY*blockDimension)/2)
 
 gameOverSound.addEventListener('ended', function () {
     this.currentTime = 0;
     this.pause();
 }, false);
+
+let gameOverOverlay = document.getElementById('game-over-overlay');
+let highscoreOverlay = document.getElementById('highscore-overlay');
+let gameOverText = document.getElementById('game-over-text');
 
 addEventListener('keydown', ({key}) => {
     switch (key) {
@@ -112,7 +128,6 @@ addEventListener('keydown', ({key}) => {
                 activeMinos = rotate(activeMinos);
             }
             break
-
     }
 });
 
@@ -120,48 +135,40 @@ addEventListener('keydown', ({key}) => {
 function initGame()
 {
     mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
-
     console.log(mazeState)
-    // audio.play();
     game()
-    // clearSound.play()
     let playButton = document.getElementById('startButton');
     playButton.addEventListener('click', function() {
         // Reset mazeState
         mazeState = Array(blocksY).fill().map(() => Array(blocksX).fill({ filled: 0, color: "" }));
-
         // Reset game variables
         gameOver = false;
         gameStarted = true;
         gameOverSoundPlayed = false;
         offset=0;
-
-        score = 0;
-        // Optionally, you can also reset the score here, if you have a scoring system
-
-        // Start the game
+        score = 106;
+// ausgeschalltet
         // backgroundSound.play();
     });
-
 }
 
-// game loop
-function game()
-{
-// const audio = new Audio("/sounds/original-tetris-theme-tetris-soundtrack-made-with-Voicemod.mp3")
-// audio.addEventListener("canplaythrough",() => audio.play())
-//     document.getElementById('tetris-soundtrack').play();
-// clearSound.play();
+function game() {
+    let params = new URLSearchParams(window.location.search);
+    let username = params.get('username');
 
-    window.requestAnimationFrame(game)
-    document.getElementById("score").innerHTML = "Score: " + score;
-    highscore = JSON.parse(localStorage.getItem("highscore"))
-    if(highscore === null) {
-        highscore = "No highscore yet!";
-    } else {
-        highscore = JSON.parse(highscore);
+    if (!gameOver){
+        window.requestAnimationFrame(game)
     }
-    document.getElementById("highscore").innerHTML = name + "'s Highscore: " + highscore;
+
+    document.getElementById("score").innerHTML = "Score: " + score;
+
+    let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
+    if (highscoreData === null) {
+        document.getElementById("highscore").innerHTML = "Noch kein Highscore vorhanden.";
+    } else {
+        document.getElementById("highscore").innerHTML = "Highscore von " + highscoreData.username + ": " + highscoreData.highscore;
+    }
+
     context.reset()
 
     hintergrund()
@@ -170,33 +177,80 @@ function game()
 
     debug()
 
-    let params = new URLSearchParams(window.location.search);
-    let username = params.get('username');
-
-
     console.log(username)
 
-    for(let i = 0; i < blocksX; i++) {
+    for (let i = 0; i < blocksX; i++) {
         if (mazeState[1][i].filled === 1) {
-            document.getElementById("gameOver").innerHTML = "Game Over";
-            document.getElementById("username").innerHTML = "";
             gameOver = true;
             backgroundSound.pause();
             backgroundSound.currentTime = 0;
             break;
-        }else {
-            document.getElementById("gameOver").innerHTML = "";
+        } else {
             document.getElementById("username").innerHTML = username;
         }
     }
+// gameOver = false
     if (gameOver) {
-        localStorage.setItem("highscore", JSON.stringify(score));
-        if (!gameOverSoundPlayed) {
-            // gameOverSound.play();
-            gameOverSoundPlayed = true;
+        // let highscoreData = JSON.parse(localStorage.getItem("highscore_data"))
+        if (highscoreData !== null && score <= highscoreData.highscore) {
+            // document.getElementById("broken-screen").style.display = "block"
+            document.getElementById("restartButton").addEventListener("click", function () {
+                window.location.href = 'name.html';
+            });
+            document.getElementById('logo-tetris').style.display = 'none';
+            gameOverOverlay.style.display = 'flex';
+            document.getElementById("username").innerHTML = "";
+            if (!gameOverSoundPlayed) {
+                // ausgeschaltet
+                // gameOverSound.play();
+                gameOverSoundPlayed = true;
+            }
+            return
+            // gameOver = false
+        } else if (highscoreData === null || score > highscoreData.highscore) {
+            highscoreData = {username: username, highscore: score};
+            localStorage.setItem("highscore_data", JSON.stringify(highscoreData));
+            backgroundSound.pause()
+            backgroundSound.currentTime = 0;
+            // document.getElementById("broken-screen").style.display = "none"
+            gameOverOverlay.classList.remove("game-over-overlay");
+            document.getElementById("restartButton").style.background = "rgba(0, 0, 0, 0)";
+            document.getElementById("restartButton").style.color = "black";
+            // document.getElementById('restartButton').addEventListener('mouseover', function() {
+            //     ("restartButton").style.color = 'white';
+            // });
+            document.getElementById("broken-screen").style.display = "none";
+            document.getElementById('highscore-overlay').style.display = 'flex';
+            document.getElementById('logo-tetris').style.display = 'none';
+            document.getElementById("new-highscore").innerHTML = "Neuen Highscore erreicht!: " + highscoreData.highscore;
+            document.getElementById('new-highscore').style.display = "flex";
+            // document.getElementById("konfetti").style.display = "flex";
+            document.getElementById('game-over-overlay').style.display = 'none';
+            // gameOverOverlay.style.display = 'none';
+            // highscoreOverlay.classList.remove("firework");
+            document.getElementById("feuer-gif").style.display = "none";
+            document.getElementById("game-over-text").style.display = "none";
+            document.getElementById("game-over-alien").style.display = "none";
+            document.getElementById("pepe-dance").style.display = "none";
+            document.getElementById("firework").style.display = "none";
+            // document.getElementById("konfetti").style.display = "flex";
+            // document.getElementById("konfetti2").style.display = "flex";
+            document.getElementById("konfetti").style.display = "flex";
+
+            // document.getElementById("firework").style.display = "block";
+            document.getElementById("restartButton").addEventListener("click", function () {
+                window.location.href = 'name.html';
+            });
+            if (!crowdCheerSoundPlayed) {
+                // ausgeschaltet
+                // crowdCheer.play()
+                crowdCheerSoundPlayed = true
+            }
+            gameOverSoundPlayed = true
+            // gameOver = false
+            return
         }
     }
-
     if (gameStarted) {
         if (activeMinos === 0 && !gameOver) {
             chosenTetrominos = generateTetromino();
@@ -208,7 +262,6 @@ function game()
         }
         drawNextTetromino();
     }
-
     minosPosition = {
         x: (startBlockX - ((canvas.width/2)-(blocksX*blockDimension)/2)) / blockDimension,
         y: ((startBlockY + offset) - ((canvas.height/2)-(blocksY*blockDimension)/2)) / blockDimension
@@ -236,7 +289,6 @@ function game()
 
         console.log(minosPosition)
         console.log(activeMinos)
-        // console.log(array)
         activeMinos = 0
 
         function isRowFull(row) {
@@ -248,7 +300,8 @@ function game()
             let incompleteRows = mazeState.filter(row => !isRowFull(row));
             let numberOfRowsToAdd = originalRows - incompleteRows.length;
             if (numberOfRowsToAdd > 0) {
-                clearSound.play();
+                // ausgeschaltet
+                // clearSound.play();
                 score += numberOfRowsToAdd
                 for (let i = 0; i < numberOfRowsToAdd; i++) {
                     incompleteRows.unshift(Array(blocksX).fill({ filled: 0, color: "" }));
@@ -269,7 +322,7 @@ function hintergrund() {
     let mazeStartX = (canvas.width/2)-(blocksX*blockDimension)/2
     let mazeStartY = (canvas.height/2) - (blocksY*blockDimension)/2
 
-    context.fillRect(mazeStartX, mazeStartY, blocksX*blockDimension, blocksY*blockDimension)
+    // context.fillRect(mazeStartX, mazeStartY, blocksX*blockDimension, blocksY*blockDimension)
 
     // Zeichne 20 horizontale Linien
     for(let i = 0; i <= 20; i++) {

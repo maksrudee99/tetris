@@ -69,48 +69,240 @@ body {
     }
 }
 
+.bebas-neue-regular {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+#gameover-mit-feuer {
+}
+
+#game-over-alien {
+    position: absolute;
+    top: 55%;
+    left: 30%; /* adjust this value to position alien */
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Alien appears over the fire */
+}
+#logo-tetris {
+    position: absolute;
+    top: 15%;
+    right: 85%; /* adjust this value to position pepe */
+    transform: translate(50%, -50%);
+    z-index: 2; /* Pepe appears over the fire */
+    width: 10%;
+}
+
+#pepe-dance {
+    position: absolute;
+    top: 55%;
+    right: 30%; /* adjust this value to position pepe */
+    transform: translate(50%, -50%);
+    z-index: 2; /* Pepe appears over the fire */
+    width: 5.5%;
+}
+#feuer-gif {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 30%; /* Adjust this to increase the width */
+    height: 20%; /* Adjust this to decrease the height */
+}
+
+#game-over-text {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Text vor dem Feuer */
+}
+
+#broken-screen {
+    position: absolute;
+    /*transform: translate(-50%, -50%);*/
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.new-highscore {
+    display: block;
+    /*color: white;*/
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Hinzugefügte Zeile */
+    z-index: 2;
+    font-family: bebas Neue, sans-serif;
+    font-size: 5em;
+    color: black;
+}
+.highscore-overlay {
+    display: none;
+    background: rgba(0, 0, 0, 0)!important;
+}
+
+#firework {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;  /* Hinzugefügte Linie */
+    height: 100%; /* Hinzugefügte Linie */
+    z-index: 1;
+}
+
+#background-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0; /* Damit liegt der Hintergrund hinter anderen Elementen */
+    background-color: white;
+}
+
+.from-us {
+    position: absolute;
+    right: 85%; /* adjust this value to position pepe */
+    transform: translate(50%, -50%);
+    z-index: 0; /* Pepe appears over the fire */
+    color: white;
+    top: 25%;
+    font-family: "Orbitron", sans-serif;
+    font-size: 1em;
+}
+
+.orbitron {
+               font-family: "Orbitron", sans-serif;
+               font-optical-sizing: auto;
+               font-style: normal;
+           }
+.tetris {
+    color: white;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Text vor dem Feuer */
+    /*font-family: "Pixelify Sans", sans-serif;*/
+    font-family: "Orbitron", sans-serif;
+    font-size: 10em;
+}
+
+/*so ist es nur klein über dem text*/
+/*#konfetti {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    top: 29%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    z-index: 1; !* Falls das Konfetti hinter dem Text liegen soll *!*/
+/*    width: 48%;*/
+/*    height: 14%;*/
+/*}*/
+
+/*so ist es über dem ganzen bildschirm*/
+#konfetti {
+    display: none;
+    position: absolute;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
+}
+
+#konfetti2 {
+    display: none;
+    position: absolute;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
+}
+
+#konfetti4 {
+    display: none;
+    position: absolute;
+    top: 0;      /* Änderung von 29% zu 0 */
+    left: 0;     /* Änderung von 50% zu 0 */
+    z-index: 1;  /* Falls das Konfetti hinter dem Text liegen soll */
+    width: 100%; /* Änderung von 48% zu 100% */
+    height: 100%; /* Änderung von 14% zu 100% */
+}
+
+.game-over-overlay {
+    position: relative; /* Positionierungsbezugspunkt für absolut positionierte Kinder */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 3em;
+    z-index: 1;
+}
+
 .highscore {
     position: absolute;
-    top: 80%;
-    right: 100px;
+    top: 5%;
+    left: 50%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
     text-align: center;
-    font-family: 'VT323', monospace;
+    font-family: "Orbitron", sans-serif;
 }
 
 .score {
     position: absolute;
     top: 60%;
-    right: 100px;
+    right: 1%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
-    text-align: center;
-    font-family: 'VT323', monospace;
+    /*text-align: center;*/
+    text-align: center; /* Text should align to right */
+    width: 20%; /* Specify the width */
+    font-family: "Orbitron", sans-serif;
 }
 
 .gameOver {
     position: absolute;
     top: 45%;
-    right: 100px;
+    right: -9%;
     transform: translate(-50%, -50%);
-    font-size: 3em;
+    font-size: 7em;
     color: #fff;
     text-align: center;
-    font-family: 'VT323', monospace;
+    font-family: Impact, fantasy;
 }
 
 .name {
     position: absolute;
     top: 45%;
-    right: 100px;
+    right: 1%;
     transform: translate(-50%, -50%);
     font-size: 3em;
     color: #fff;
-    text-align: center;
-    font-family: 'VT323', monospace;
+    text-align: center; /* Text should align to right */
+    width: 20%; /* Specify the width */
+    /*text-align: center;*/
+    font-family: "Orbitron", sans-serif;
 }
 
 .button-28 {
@@ -122,7 +314,8 @@ body {
     border-radius: 15px;
     color: white;
     cursor: pointer;
-    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: "Orbitron", sans-serif;
+    /*font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";*/
     font-size: 16px;
     font-weight: 600;
     padding: 16px 24px;

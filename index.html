@@ -2,12 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TETRIS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee+Spice&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee+Spice&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
 </head>
 <body style="margin: 0; padding: 0">
+<!--<div id="broken-screen" class="broken-screen">-->
+<!--    <img src="pictures/black-cracked-background-with-broken-glass-texture.jpg" alt="broken">-->
+<!--</div>-->
+
+
+
+<!--<img id="firework" src="pictures/fireworks-9582.gif" alt="firework">-->
+<!--<div id="game-over-overlay" class="game-over-overlay" >-->
+<!--    <h1 id="game-over-text" style="color: white; font-size: 3em; z-index: 2;">Game Over!</h1>-->
+<!--    <button id="restartButton" class="button-28" style="z-index: 2;">Play again</button>-->
+<!--</div>-->
+
+
+<!--<div id="game-over-overlay" class="game-over-overlay" >-->
+<!--    <img id="game-over-alien" src="pictures/alien.gif" style="z-index: 2;" alt="skelett">-->
+<!--    <img id="feuer-gif" src="pictures/feuer.gif" style="z-index: 2;" alt="feuer">-->
+<!--    <h1 id="game-over-text" style="color: white; font-size: 3em; z-index: 2;">Game Over!</h1>-->
+<!--    <button id="restartButton" class="button-28" style="z-index: 2;">Play again</button>-->
+<!--</div>-->
+
+<div id="game-over-overlay" class="game-over-overlay" >
+    <div>
+        <img id="broken-screen" src="pictures/black-cracked-background-with-broken-glass-texture.jpg" alt="broken">
+        <img id="game-over-alien" src="pictures/alien.gif" alt="skelett">
+        <img id="feuer-gif" src="pictures/feuer.gif" alt="feuer">
+        <img id="pepe-dance" src="pictures/pepedance.gif" alt="skelett">
+    </div>
+    <h1 id="game-over-text" >Game Over!</h1>
+    <button id="restartButton" class="button-28" style="z-index: 2;">Play again</button>
+</div>
+<img id="logo-tetris" src="pictures/logoTetris.png" alt="Tetris Logo">
+<div class='from-us'>By Marie Schmidt <br> & Maxim Rudenco</div>
+<div id="highscore-overlay" class="highscore-overlay">
+    <div id="background-overlay"></div>
+<h1 id="new-highscore" class="new-highscore"></h1>
+<img id="firework" src="pictures/fireworks-9582.gif" alt="firework" >
+<img id="konfetti" src="pictures/konfetti.gif" alt="konfetti">
+<!--<img id="konfetti4" src="pictures/konfetti4.gif" alt="konfetti4">-->
+<!--<img id="konfetti2" src="pictures/konfetti2.gif" alt="konfetti2">-->
+</div>
+
+<!--<div id="game-over-overlay" class="game-over-overlay" >-->
+<!--<div class="tenor-gif-embed" data-postid="8938585581978965350" data-share-method="host" data-aspect-ratio="1.6" data-width="100%"><a href="https://tenor.com/view/game-over-game-over-gif-8938585581978965350">Game Over Sticker</a>from <a href="https://tenor.com/search/game+over-stickers">Game Over Stickers</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>-->
+<!--    <button id="restartButton" class="button-28" style="z-index: 2;">Play again</button>-->
+<!--</div>-->
+
 <canvas id="canvas" ></canvas>
-<h2 class="gameOver" id="gameOver" ></h2>
 <h2 class="score" id="score" ></h2>
 <h2 class="highscore" id="highscore" ></h2>
 <button id="startButton" class="button-28" role="button">Start Game</button>
@@ -17,7 +70,7 @@
     <div class="wave"></div>
     <div class="wave"></div>
 </div>
-<script src="tetris.js"></script>
+<script type="module" src="tetris.js"></script>
 <!--<script>-->
 <!--    let highscore =-->
 <!--    {-->
